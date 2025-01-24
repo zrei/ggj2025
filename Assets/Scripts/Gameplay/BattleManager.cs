@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public enum GameState
 {
     Cutscene,
     InGame,
+    BetweenWaves,
 }
 
 public class BattleManager : Singleton<BattleManager>
@@ -32,8 +34,9 @@ public class BattleManager : Singleton<BattleManager>
             }
             else
             {
-                PlayerHudManager.Instance.DisplayWaveComplete();
-                State = GameState.Cutscene;
+                // TODO: Freeze everything
+                State = GameState.BetweenWaves;
+                PlayerHudManager.Instance.DisplayEndWaveUI();
             }
         }
     }
@@ -43,14 +46,25 @@ public class BattleManager : Singleton<BattleManager>
         CurrentWave = 1;
     }
 
-    private void NextWave()
+    public void NextWave()
     {
+        CurrentWave++;
+        int timeForStage = DWave.GetDataById(CurrentWave).Value.WaveTime;
+        StageTimer = timeForStage;
 
+        // TODO: Spawn Enemies
+
+        State = GameState.InGame;
     }
 
-    private void CheckIfPlayerPassed()
+    public bool CheckIfPlayerPassed()
     {
+        var dWave = DWave.GetDataById(CurrentWave).Value;
 
+        // TODO: Replace this!
+        //return dWave.CleanThreshold >= the_threshold;
+
+        return true;
     }
 
     private void FinishGame(bool isWin)
