@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public enum TileType
 {
-    PAINTED,
+    CLEAN,
     NEUTRAL,
     DIRTY
 }
@@ -97,7 +97,7 @@ public class GridManager : Singleton<GridManager>
         {
             TileType.NEUTRAL => m_NeutralTile,
             TileType.DIRTY => m_DirtyTile,
-            TileType.PAINTED => m_PaintedTile,
+            TileType.CLEAN => m_PaintedTile,
             _ => null
         };
     }
