@@ -34,16 +34,11 @@ public class BattleManager : Singleton<BattleManager>
             }
             else
             {
-                // TODO: Freeze everything
+                // TODO: Freeze / reset everything
                 State = GameState.BetweenWaves;
-                PlayerHudManager.Instance.DisplayEndWaveUI();
+                PlayerHudManager.Instance.DisplayEndWaveUI().Forget();
             }
         }
-    }
-
-    private void StartGame()
-    {
-        CurrentWave = 1;
     }
 
     public void NextWave()

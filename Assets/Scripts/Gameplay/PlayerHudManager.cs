@@ -1,6 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,11 +15,11 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     [field: SerializeField]
     private TextMeshProUGUI StageTimerText { get; set; }
 
-    [field: SerializeField, Header("End Wave Display")]
-    private GameObject EndWaveDisplayParent { get; set; }
+    [field: SerializeField, Header("Clean Threshold")]
+    private TextMeshProUGUI CleanThresholdText { get; set; }
 
-    [field: SerializeField]
-    private Button NextWaveButton { get; set; }
+    [field: SerializeField, Header("End Wave Display")]
+    private GameObject LoseGameDisplayParent { get; set; }
 
     [field: SerializeField]
     private Button TryAgainButton { get; set; }
@@ -32,18 +30,14 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     [field: SerializeField, Header("Sounds")]
     private AudioSource AudioSource { get; set; }
 
-    private AudioClip DrumrollAudioClip { get; set; }
-
     [field: SerializeField]
-    private AudioClip CheerAudioClip { get; set; }
+    private AudioClip WhistleAudioClip { get; set; }
 
     [field: SerializeField]
     private AudioClip SadAudioClip { get; set; }
 
     protected override void HandleAwake()
     {
-        NextWaveButton.onClick.RemoveAllListeners();
-        NextWaveButton.onClick.AddListener(OnNextWaveButtonClick);
         TryAgainButton.onClick.RemoveAllListeners();
         TryAgainButton.onClick.AddListener(OnTryAgainButtonClick);
         MainMenuButton.onClick.RemoveAllListeners();
@@ -55,7 +49,14 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         if (BattleManager.Instance.State == GameState.InGame)
         {
             StageTimerText.text = ConvertTimerToDisplay(BattleManager.Instance.StageTimer);
+            // TODO
+            // CleanThresholdText.text = $"{}%"
         }
+    }
+
+    public void StartGame()
+    {
+        DisplayStartWaveUI().Forget();
     }
 
     private async UniTask DisplayStartWaveUI()
@@ -65,11 +66,17 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         // We get the time for the stage first to display
         int nextWaveNumber = BattleManager.Instance.CurrentWave + 1;
         int timeForStage = DWave.GetDataById(nextWaveNumber).Value.WaveTime;
+        StageTimerText.text = ConvertTimerToDisplay(timeForStage);
 
-        await UniTask.WaitForSeconds(1f);
+        // Some buffer for the next wave display to animate
+        // TODO: Next Wave Display
+
+        await UniTask.WaitForSeconds(2f);
         if (!this) return;
 
         BattleManager.Instance.NextWave();
+
+        await UniTask.CompletedTask;
     }
 
     private string ConvertTimerToDisplay(float time)
@@ -83,44 +90,34 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         return $"{minutesDisplay}:{secondsDisplay}";
     }
 
-    public void DisplayEndWaveUI()
+    public async UniTask DisplayEndWaveUI()
     {
-        DisplayEndWavePanel().Forget();
-    }
+        // TODO: Display the wave end UI
 
-    private async UniTask DisplayEndWavePanel()
-    {
+        AudioSource.PlayOneShot(WhistleAudioClip);
         bool wavePassed = BattleManager.Instance.CheckIfPlayerPassed();
 
-        // Play drumroll effect and display the result panel
-        AudioSource.PlayOneShot(DrumrollAudioClip);
-        EndWaveDisplayParent.SetActive(true);
-
-        // TODO: Do the random numbers effect
-
-        await UniTask.WaitForSeconds(2f);
+        // Some buffer time between waves
+        await UniTask.WaitForSeconds(1f);
         if (!this) return;
 
         if (wavePassed)
         {
-            
+            DisplayStartWaveUI().Forget();
         }
         else
         {
-
+            AudioSource.PlayOneShot(SadAudioClip);
+            LoseGameDisplayParent.SetActive(true);
         }
-    }
 
-    private void OnNextWaveButtonClick()
-    {
-        EndWaveDisplayParent.SetActive(false);
-
-        DisplayStartWaveUI().Forget();
+        await UniTask.CompletedTask;
     }
 
     private void OnTryAgainButtonClick()
     {
-        // TODO: idk about the logic yet lol
+        // TODO
+
     }
 
     private void OnMainMenuButtonClick()
