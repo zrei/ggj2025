@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : Singleton<Player>, IDamagable
 {
+    public Transform UnitTransform => transform;
     public bool IsDead { get; private set; }
 
     private int m_MaxHealth;

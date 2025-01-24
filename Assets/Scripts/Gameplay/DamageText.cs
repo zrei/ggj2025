@@ -10,6 +10,7 @@ public class DamageText : MonoBehaviour
     private TextMeshPro DamageValueText { get; set; }
 
     private float m_Timer;
+    private bool m_IsSetUp = false;
 
     private void Awake()
     {
@@ -19,17 +20,21 @@ public class DamageText : MonoBehaviour
     public void Setup(int value)
     {
         DamageValueText.text = value.ToString();
+        m_IsSetUp = true;
     }
 
     private void Update()
     {
-        if (m_Timer > 0)
+        if (m_IsSetUp)
         {
-            m_Timer -= Time.deltaTime;
-        }
-        else
-        {
-            Destroy(gameObject);
+            if (m_Timer > 0)
+            {
+                m_Timer -= Time.deltaTime;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
