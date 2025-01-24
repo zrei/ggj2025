@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     private float NeutralDragAmount { get; set; }
     [field: SerializeField]
     private float DirtyDragAmount { get; set; }
+    [Tooltip("When velocity falls below this threshold, the slide state is exited")]
+    [SerializeField] private float m_StopDragThreshold = 0.1f;
 
     private Rigidbody2D m_Rigidbody;
     private SpriteRenderer m_SpriteRenderer;
@@ -45,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     #region Slide
     private const float NORMAL_MOVEMENT_DRAG = 0;
+    private float m_StopDragThresholdSquared;
     private bool m_IsSliding = false;
     private Vector2 m_CurrSlideDirection;
     private Vector2 m_PreviousVelocity;
@@ -57,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
+        m_StopDragThresholdSquared = m_StopDragThreshold * m_StopDragThreshold;
     }
 
     private void Update()
@@ -94,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
             m_IsSliding = true;
             GlobalEvents.Player.OnPlayerStartSliding?.Invoke();
         }
-        else if (m_IsSliding && m_Rigidbody.velocity.sqrMagnitude < m_PreviousVelocity.sqrMagnitude && m_Rigidbody.velocity == Vector2.zero)
+        else if (m_IsSliding && m_Rigidbody.velocity.sqrMagnitude < m_PreviousVelocity.sqrMagnitude && m_Rigidbody.velocity.sqrMagnitude < m_StopDragThresholdSquared)
         {
             // exit slide
             m_IsSliding = false;
