@@ -18,7 +18,10 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     [field: SerializeField, Header("Clean Threshold")]
     private TextMeshProUGUI CleanThresholdText { get; set; }
 
-    [field: SerializeField, Header("End Wave Display")]
+    [field: SerializeField, Header("Wave Start Display")]
+    private Animator WaveStartAnimator { get; set; }
+
+    [field: SerializeField, Header("Lose Game Display")]
     private GameObject LoseGameDisplayParent { get; set; }
 
     [field: SerializeField]
@@ -69,9 +72,12 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         StageTimerText.text = ConvertTimerToDisplay(timeForStage);
 
         // Some buffer for the next wave display to animate
-        // TODO: Next Wave Display
+        WaveStartAnimator.Play("WaveStartMoveIn");
+        await UniTask.WaitForSeconds(1.5f);
+        if (!this) return;
 
-        await UniTask.WaitForSeconds(2f);
+        WaveStartAnimator.Play("WaveStartMoveOut");
+        await UniTask.WaitForSeconds(1.5f);
         if (!this) return;
 
         BattleManager.Instance.NextWave();
