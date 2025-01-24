@@ -16,14 +16,33 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 m_MovementVector;
 
+    private TileType m_CurrTileType = TileType.NEUTRAL;
+    private TileType CurrTileType
+    {
+        get
+        {
+            return m_CurrTileType;
+        }
+        set
+        {
+            if (m_CurrTileType != value)
+            {
+                // TODO: do whatever you need on tile type change
+            }
+            m_CurrTileType = value;
+        }
+    }
+
     private void Awake()
     {
+        CurrTileType = TileType.NEUTRAL;
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
+        CurrTileType = GridManager.Instance.GetTileTypeAtWorldCoordinates(transform.position);
         GetPlayerInputs();
         FlipSprite();
     }
@@ -50,8 +69,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // TODO: Check what the player is moving on and adjust
+        m_Rigidbody.velocity = m_MovementVector.normalized * GetMovementSpeed();
+    }
 
-        m_Rigidbody.velocity = m_MovementVector.normalized * NeutralMovementSpeed;
+    private float GetMovementSpeed()
+    {
+        return CurrTileType switch
+        {
+            TileType.PAINTED => CleanMovementSpeed,
+            TileType.DIRTY => DirtyMovementSpeed,
+            TileType.NEUTRAL => NeutralMovementSpeed,
+            _ => 0,
+        };
     }
 }

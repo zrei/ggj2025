@@ -45,6 +45,7 @@ public class GridManager : Singleton<GridManager>
             for (int c = 0; c < m_NumCols; ++c)
             {
                 m_TileStates[r, c] = TileType.NEUTRAL;
+                SetTileVisuals(new Vector2Int(r, c), TileType.NEUTRAL);
             }
         }
 
@@ -71,7 +72,7 @@ public class GridManager : Singleton<GridManager>
         m_TileStates[tileCoordinates.x, tileCoordinates.y] = tileType;
 
         // update visuals
-        m_Tilemap.SetTile(ConvertToTilemapCoordinates(tileCoordinates), GetTile(tileType));
+        SetTileVisuals(tileCoordinates, tileType);
     }
     #endregion
 
@@ -99,6 +100,12 @@ public class GridManager : Singleton<GridManager>
             TileType.PAINTED => m_PaintedTile,
             _ => null
         };
+    }
+
+    private void SetTileVisuals(Vector2Int tileCoordinates, TileType tileType)
+    {
+        // update visuals
+        m_Tilemap.SetTile(ConvertToTilemapCoordinates(tileCoordinates), GetTile(tileType));
     }
     #endregion
 }
