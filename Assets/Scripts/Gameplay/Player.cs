@@ -33,6 +33,8 @@ public class Player : Singleton<Player>, IDamagable
     public void InternalIncHp(int value)
     {
         // TODO: Spawn Damage Text (?)
+        m_CurrentHealth = Mathf.Min(m_CurrentHealth + value, m_MaxHealth);
+        OnPlayerHealthValueChanged?.Invoke(m_CurrentHealth);
     }
 
     public void InternalDecHp(int value)
@@ -42,7 +44,6 @@ public class Player : Singleton<Player>, IDamagable
             return;
         }
 
-        // TODO: Spawn Damage Text
         m_CurrentHealth -= value;
         if (m_CurrentHealth < 0)
         {

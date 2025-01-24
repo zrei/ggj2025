@@ -1,44 +1,42 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "DEnemy", menuName = "Data/DEnemy", order = 3)]
-public class DEnemy : ScriptableObject, IDataImport
+[CreateAssetMenu(fileName = "DWaveSpawn", menuName = "Data/DWaveSpawn", order = 3)]
+public class DWaveSpawn : ScriptableObject, IDataImport
 {
-    private static DEnemy s_loadedData;
-    private static Dictionary<int, EnemyData> s_cachedDataDict;
+    private static DWaveSpawn s_loadedData;
+    private static Dictionary<int, List<WaveSpawnData>> s_cachedDataDict;
 
     [field: SerializeField]
-    public List<EnemyData> Data { get; private set; }
+    public List<WaveSpawnData> Data { get; private set; }
 
-    public static DEnemy GetAllData()
+    public static DWaveSpawn GetAllData()
     {
         if (s_loadedData == null)
         {
             // Load and cache results
-            s_loadedData = Resources.Load<DEnemy>("data/denemy");
+            s_loadedData = Resources.Load<DWaveSpawn>("data/dwavespawn");
 
             // Calculate and cache some results
             s_cachedDataDict = new();
-            foreach (var enemyData in s_loadedData.Data)
+            foreach (var waveSpawnData in s_loadedData.Data)
             {
-#if UNITY_EDITOR
-                if (s_cachedDataDict.ContainsKey(enemyData.Id))
+                if (!s_cachedDataDict.ContainsKey(waveSpawnData.Wave))
                 {
-                    Debug.LogError($"Duplicate Id {enemyData.Id}");
+                    s_cachedDataDict[waveSpawnData.Wave] = new List<WaveSpawnData>();
                 }
-#endif
-                s_cachedDataDict[enemyData.Id] = enemyData;
+
+                s_cachedDataDict[waveSpawnData.Wave].Add(waveSpawnData);
             }
         }
 
         return s_loadedData;
     }
 
-    public static EnemyData? GetDataById(int id)
+    public static List<WaveSpawnData> GetDataById(int id)
     {
         if (s_cachedDataDict == null)
         {
@@ -102,17 +100,18 @@ public class DEnemy : ScriptableObject, IDataImport
                 paramList[j] = paramList[j].Trim();
             }
 
+            var spawnPointSplit = paramList[3].Split(',');
+
             // New item
-            var enemyData = new EnemyData
+            var waveSpawnData = new WaveSpawnData
             {
-                Id = CommonUtil.ConvertToInt32(paramList[1]),
-                Attack = CommonUtil.ConvertToInt32(paramList[2]),
-                AttackSpeed = CommonUtil.ConvertToSingle(paramList[3]),
-                Hp = CommonUtil.ConvertToInt32(paramList[4]),
-                MovementSpeed = CommonUtil.ConvertToSingle(paramList [5]),
-                AttackRange = CommonUtil.ConvertToSingle(paramList [6]),
+                Wave = CommonUtil.ConvertToInt32(paramList[1]),
+                EnemyId = CommonUtil.ConvertToInt32(paramList[2]),
+                RowSpawnPoint = CommonUtil.ConvertToInt32(spawnPointSplit[0]),
+                ColSpawnPoint = CommonUtil.ConvertToInt32(spawnPointSplit[1]),
+                Delay = CommonUtil.ConvertToSingle(paramList[4]),
             };
-            s_loadedData.Data.Add(enemyData);
+            s_loadedData.Data.Add(waveSpawnData);
         }
 
         CommonUtil.SaveScriptableObject(s_loadedData);
@@ -121,23 +120,20 @@ public class DEnemy : ScriptableObject, IDataImport
 }
 
 [Serializable]
-public struct EnemyData
+public struct WaveSpawnData
 {
     [field: SerializeField]
-    public int Id { get; set; }
+    public int Wave { get; set; }
 
     [field: SerializeField]
-    public int Attack { get; set; }
+    public int EnemyId { get; set; }
 
     [field: SerializeField]
-    public float AttackSpeed { get; set; }
+    public int RowSpawnPoint { get; set; }
 
     [field: SerializeField]
-    public int Hp {  get; set; }
+    public int ColSpawnPoint { get; set; }
 
     [field: SerializeField]
-    public float MovementSpeed { get; set; }
-
-    [field: SerializeField]
-    public float AttackRange { get; set; }
+    public float Delay { get; set; }
 }

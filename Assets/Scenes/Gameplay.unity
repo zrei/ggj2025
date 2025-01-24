@@ -634,6 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63291a219ef99474ab194df17914506d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <DamageTextPrefab>k__BackingField: {fileID: 2778187166958773830, guid: df197b237cd13cd4d8a7a3cd9c79658e, type: 3}
 --- !u!1 &226118208
 GameObject:
   m_ObjectHideFlags: 0

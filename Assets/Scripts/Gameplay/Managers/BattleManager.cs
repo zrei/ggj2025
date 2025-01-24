@@ -34,6 +34,16 @@ public class BattleManager : Singleton<BattleManager>
             }
             else
             {
+                // TODO: Kill all enemies and projectiles
+                var enemyUnits = GameObject.FindGameObjectsWithTag("Enemy");
+                foreach (var enemy in enemyUnits)
+                {
+                    enemy.GetComponent<EnemyUnit>().Kill();
+                }
+
+                // TODO
+                var enemyProjectiles = GameObject.FindGameObjectsWithTag("EnemyProjectile");
+
                 // TODO: Freeze / reset everything
                 State = GameState.BetweenWaves;
                 PlayerHudManager.Instance.DisplayEndWaveUI().Forget();
@@ -47,7 +57,7 @@ public class BattleManager : Singleton<BattleManager>
         int timeForStage = DWave.GetDataById(CurrentWave).Value.WaveTime;
         StageTimer = timeForStage;
 
-        // TODO: Spawn Enemies
+        SpawnManager.Instance.SpawnWave(CurrentWave);
 
         State = GameState.InGame;
     }

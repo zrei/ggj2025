@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerHudManager : Singleton<PlayerHudManager>
 {
     [field: SerializeField]
-    private Slider PlayerHealthBar { get; set; }
+    private Slider PlayerHealthSlider { get; set; }
 
     [field: SerializeField, Header("Stage Timer")]
     private GameObject StageTimerParent {  get; set; }
@@ -41,13 +41,20 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     protected override void HandleAwake()
     {
+        Player.OnPlayerHealthValueChanged += OnPlayerHealthValueChanged;
+
         TryAgainButton.onClick.RemoveAllListeners();
         TryAgainButton.onClick.AddListener(OnTryAgainButtonClick);
         MainMenuButton.onClick.RemoveAllListeners();
         MainMenuButton.onClick.AddListener(OnMainMenuButtonClick);
 
-        PlayerHealthBar.maxValue = GlobalEvents.Player.PlayerMaxHealth;
-        PlayerHealthBar.value = GlobalEvents.Player.PlayerMaxHealth;
+        PlayerHealthSlider.maxValue = GlobalEvents.Player.PlayerMaxHealth;
+        PlayerHealthSlider.value = GlobalEvents.Player.PlayerMaxHealth;
+    }
+
+    protected override void HandleDestroy()
+    {
+        Player.OnPlayerHealthValueChanged -= OnPlayerHealthValueChanged;
     }
 
     private void Update()
@@ -121,6 +128,11 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         }
 
         await UniTask.CompletedTask;
+    }
+
+    private void OnPlayerHealthValueChanged(int value)
+    {
+        PlayerHealthSlider.value = value; 
     }
 
     private void OnTryAgainButtonClick()
