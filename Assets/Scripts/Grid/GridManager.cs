@@ -134,6 +134,13 @@ public class GridManager : Singleton<GridManager>
         m_Tilemap.SetTile(ConvertToTilemapCoordinates(tileCoordinates), GetTile(tileType));
     }
     #endregion
+
+    #region Position Helpers
+    public Vector2 GetWorldPositionOfTile(int rowNum, int colNum)
+    {
+        return new Vector2(m_LeftXPos + colNum * m_TileLength, m_BottomYPos + rowNum * m_TileLength);
+    }
+    #endregion
 }
 
 #if UNITY_EDITOR
