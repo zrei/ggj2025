@@ -635,6 +635,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <DamageTextPrefab>k__BackingField: {fileID: 2778187166958773830, guid: df197b237cd13cd4d8a7a3cd9c79658e, type: 3}
+  <EnemySpawnIndicatorPrefab>k__BackingField: {fileID: 0}
+  <EnemyUnitPrefabs>k__BackingField: []
 --- !u!1 &226118208
 GameObject:
   m_ObjectHideFlags: 0
@@ -1947,7 +1949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f08dbd9140673545ac389f38c991424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PlayerHealthBar>k__BackingField: {fileID: 98696516}
+  <PlayerHealthSlider>k__BackingField: {fileID: 0}
   <StageTimerParent>k__BackingField: {fileID: 1532924123}
   <StageTimerText>k__BackingField: {fileID: 61731413}
   <CleanThresholdText>k__BackingField: {fileID: 0}
