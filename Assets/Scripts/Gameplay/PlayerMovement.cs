@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     private bool m_IsSliding = false;
     private Vector2 m_CurrSlideDirection;
     private Vector2 m_PreviousVelocity;
+    private Vector3 m_PreviousWorldPosition;
     #endregion
 
     private void Awake()
@@ -60,11 +61,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (m_IsSliding)
+        {
+            GridManager.Instance.SetTileStatus(m_PreviousWorldPosition, TileType.CLEAN);
+        }
+
         CurrTileType = GridManager.Instance.GetTileTypeAtWorldCoordinates(transform.position);
         GetPlayerInputs();
         FlipSprite();
         UpdateAim();
+        UpdateStateValues();
+    }
+
+    private void UpdateStateValues()
+    {
         m_PreviousVelocity = m_Rigidbody.velocity;
+        m_PreviousWorldPosition = m_Rigidbody.position;
     }
 
     private void UpdateAim()
