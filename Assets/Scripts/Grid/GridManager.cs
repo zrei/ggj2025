@@ -10,13 +10,40 @@ public enum TileType
     DIRTY
 }
 
+public class TileState
+{
+    private TileType[,] m_TileStates;
+
+    public TileState(int numRows, int numCols)
+    {
+        m_TileStates = new TileType[numRows, numCols];
+        for (int r = 0; r < numRows; ++r)
+        {
+            for (int c = 0; c < numCols; ++c)
+            {
+                m_TileStates[r, c] = TileType.NEUTRAL;
+            }
+        }
+    }
+
+    public TileType GetTileTypeAtTile(Vector2Int tileCoordinates)
+    {
+        return m_TileStates[tileCoordinates.y, tileCoordinates.x];
+    }
+
+    public void SetTileTypeAtTile(Vector2Int tileCoordinates, TileType tileType)
+    {
+        m_TileStates[tileCoordinates.y, tileCoordinates.x] = tileType;
+    }
+}
+
 public class GridManager : Singleton<GridManager>
 {
     [Header("Dimensions")]
     [SerializeField] private int m_NumRows = 10;
     [SerializeField] private int m_NumCols = 10;
     [Tooltip("Scale will be set to this")]
-    [SerializeField] private int m_TileLength = 1;
+    [SerializeField] private float m_TileLength = 1;
 
     [Header("Visuals")]
     [SerializeField] private Grid m_Grid = null;
@@ -27,10 +54,10 @@ public class GridManager : Singleton<GridManager>
 
     public int NumRows => m_NumRows;
     public int NumCols => m_NumCols;
-    public int TileLength => m_TileLength;
+    public float TileLength => m_TileLength;
     public Grid Grid => m_Grid;
 
-    private TileType[,] m_TileStates;
+    private TileState m_TileState;
 
     // grid calculations
     private float m_LeftXPos;
@@ -38,38 +65,37 @@ public class GridManager : Singleton<GridManager>
 
     protected override void HandleAwake()
     {
-        m_TileStates = new TileType[m_NumRows, m_NumCols];
+        m_TileState = new TileState(m_NumRows, m_NumCols);
 
         for (int r = 0; r < m_NumRows; ++r)
         {
             for (int c = 0; c < m_NumCols; ++c)
             {
-                m_TileStates[r, c] = TileType.NEUTRAL;
-                SetTileVisuals(new Vector2Int(r, c), TileType.NEUTRAL);
+                SetTileVisuals(new Vector2Int(c, r), TileType.NEUTRAL);
             }
         }
 
         Vector2 centerPos = transform.position;
-        m_LeftXPos = centerPos.x - (float) (m_NumCols / 2) * m_TileLength;
-        m_BottomYPos = centerPos.y - (float) (m_NumRows / 2) * m_TileLength;
+        m_LeftXPos = centerPos.x - (float)(m_NumCols / 2) * m_TileLength;
+        m_BottomYPos = centerPos.y - (float)(m_NumRows / 2) * m_TileLength;
     }
 
     #region Tile Status
     public TileType GetTileTypeAtWorldCoordinates(Vector2 worldCoordinates)
     {
         Vector2Int tileCoordinates = CalculateTileCoordinates(worldCoordinates);
-        return m_TileStates[tileCoordinates.x, tileCoordinates.y];
+        return m_TileState.GetTileTypeAtTile(tileCoordinates);
     }
 
     public void SetTileStatus(Vector2 worldCoordinates, TileType tileType)
     {
         Vector2Int tileCoordinates = CalculateTileCoordinates(worldCoordinates);
 
-        if (m_TileStates[tileCoordinates.x, tileCoordinates.y] == tileType)
+        if (m_TileState.GetTileTypeAtTile(tileCoordinates) == tileType)
             return;
         
         // update state
-        m_TileStates[tileCoordinates.x, tileCoordinates.y] = tileType;
+        m_TileState.SetTileTypeAtTile(tileCoordinates, tileType);
 
         // update visuals
         SetTileVisuals(tileCoordinates, tileType);
@@ -81,7 +107,7 @@ public class GridManager : Singleton<GridManager>
     {
         int rowNum = Mathf.FloorToInt((worldCoordinates.y - m_BottomYPos) / m_TileLength);
         int colNum = Mathf.FloorToInt((worldCoordinates.x - m_LeftXPos) / m_TileLength);
-        return new Vector2Int(rowNum, colNum);
+        return new Vector2Int(colNum, rowNum);
     }
 
     private Vector3Int ConvertToTilemapCoordinates(Vector2Int tileCoordinates)
