@@ -92,12 +92,14 @@ public class PlayerMovement : MonoBehaviour
             m_Rigidbody.drag = GetDrag();
             m_Rigidbody.AddForce(m_CurrSlideDirection.normalized * m_InitialSlideForce);
             m_IsSliding = true;
+            GlobalEvents.Player.OnPlayerStartSliding?.Invoke();
         }
         else if (m_IsSliding && m_Rigidbody.velocity.sqrMagnitude < m_PreviousVelocity.sqrMagnitude && m_Rigidbody.velocity == Vector2.zero)
         {
             // exit slide
             m_IsSliding = false;
             m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
+            GlobalEvents.Player.OnPlayerStopSliding?.Invoke();
         }
  
         m_MovementVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
