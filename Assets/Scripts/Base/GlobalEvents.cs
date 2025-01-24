@@ -9,6 +9,7 @@ public static class GlobalEvents
 {
     public static class Player
     {
+        public static int PlayerMaxHealth = 100;
         public static VoidEvent OnPlayerStartSliding;
         public static VoidEvent OnPlayerStopSliding;
     }

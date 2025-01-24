@@ -45,6 +45,9 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         TryAgainButton.onClick.AddListener(OnTryAgainButtonClick);
         MainMenuButton.onClick.RemoveAllListeners();
         MainMenuButton.onClick.AddListener(OnMainMenuButtonClick);
+
+        PlayerHealthBar.maxValue = GlobalEvents.Player.PlayerMaxHealth;
+        PlayerHealthBar.value = GlobalEvents.Player.PlayerMaxHealth;
     }
 
     private void Update()
