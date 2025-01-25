@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
@@ -14,10 +12,11 @@ public class EnemyProjectile : MonoBehaviour
     private Vector2 m_PreviousPosition;
     private bool m_HasPreviousPosition;
 
-    private void Start()
+    private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody2D>();
     }
+
     /*
      * Called by enemy behaviour
      */

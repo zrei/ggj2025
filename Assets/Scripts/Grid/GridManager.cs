@@ -314,7 +314,7 @@ public class GridManager : Singleton<GridManager>
         excludedPositionsSet.Add(currPosition);
         List<Vector2Int> allowedCorodinates = GetAllowedTileTargets(excludedPositionsSet, GetFilteredTileTypes(targetType));
 
-        Vector2Int randomTargetLocation = allowedCorodinates[UnityEngine.Random.Range(0, allowedCorodinates.Count - 1)];
+        Vector2Int randomTargetLocation = allowedCorodinates[UnityEngine.Random.Range(0, allowedCorodinates.Count)];
  
 
         return Pathfind(currPosition, randomTargetLocation, false);
