@@ -20,7 +20,7 @@ public class EnemyUnit : MonoBehaviour, IDamagable
     private int m_Attack;
     private float m_AttackSpeed;
     private float m_MovementSpeed;
-    private float m_ProjectileSpeed;
+    private float m_HyperSpeed;
 
     private void Awake()
     {
@@ -36,7 +36,7 @@ public class EnemyUnit : MonoBehaviour, IDamagable
         m_MaxHealth = health;
         m_CurrentHealth = health;
         m_MovementSpeed = dEnemy.MovementSpeed * movementSpeedMult;
-        m_ProjectileSpeed = dEnemy.ProjectileSpeed * projectileSpeedMult;
+        m_HyperSpeed = dEnemy.Speed * projectileSpeedMult;
     }
 
     public void InternalIncHp(int value)

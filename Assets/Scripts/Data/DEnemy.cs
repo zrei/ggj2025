@@ -110,10 +110,12 @@ public class DEnemy : ScriptableObject, IDataImport
                 Hp = CommonUtil.ConvertToInt32(paramList[3]),
                 AttackSpeed = CommonUtil.ConvertToSingle(paramList[4]),
                 MovementSpeed = CommonUtil.ConvertToSingle(paramList [5]),
-                ProjectileSpeed = CommonUtil.ConvertToSingle(paramList[6]),
-                ProjectileTarget = Enum.TryParse(paramList[7], out ProjectileTarget projectileType) ? projectileType : ProjectileTarget.None,
-                ProjectileLifetime = CommonUtil.ConvertToSingle(paramList[8]),
-                NumberOfProjectiles = CommonUtil.ConvertToInt32(paramList[9]),
+                AtkType = Enum.TryParse(paramList[6], out AttackType atkType) ? atkType : AttackType.None,
+                Speed = CommonUtil.ConvertToSingle(paramList[7]),
+                Target = Enum.TryParse(paramList[8], out TargetType projectileType) ? projectileType : TargetType.None,
+                Duration = CommonUtil.ConvertToSingle(paramList[9]),
+                Param1 = CommonUtil.ConvertToInt32(paramList[10]),
+                Param2 = Enum.TryParse(paramList[11], out DamageTypeDealt dmgType) ? dmgType : DamageTypeDealt.None,
             };
             s_loadedData.Data.Add(enemyData);
         }
@@ -142,19 +144,25 @@ public struct EnemyData
     public float MovementSpeed { get; set; }
 
     [field: SerializeField]
-    public float ProjectileSpeed {  get; set; }
+    public AttackType AtkType { get; set; }
 
     [field: SerializeField]
-    public ProjectileTarget ProjectileTarget { get; set; }
+    public float Speed {  get; set; }
 
     [field: SerializeField]
-    public float ProjectileLifetime {  get; set; }
+    public TargetType Target { get; set; }
 
     [field: SerializeField]
-    public int NumberOfProjectiles { get; set; }
+    public float Duration {  get; set; }
+
+    [field: SerializeField]
+    public int Param1 { get; set; }
+
+    [field: SerializeField]
+    public DamageTypeDealt Param2 { get; set; }
 }
 
-public enum ProjectileTarget
+public enum TargetType
 {
     Player,
     Enemy,
@@ -162,5 +170,18 @@ public enum ProjectileTarget
     NeutralTile,
     CleanTile,
     NeutralOrCleanTile,
+    None
+}
+
+public enum AttackType
+{
+    Projectile,
+    None
+}
+
+public enum DamageTypeDealt
+{
+    Single,
+    Aoe,
     None
 }
