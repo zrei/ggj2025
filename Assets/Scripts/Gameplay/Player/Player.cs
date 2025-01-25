@@ -145,7 +145,7 @@ public class Player : Singleton<Player>, IDamagable
 
     private IEnumerator FlashRedOnDamage()
     {
-        m_SR.color = Color.red;
+        m_SR.color = m_DamagedFlashColor;
 
         float t = 0f;
 
