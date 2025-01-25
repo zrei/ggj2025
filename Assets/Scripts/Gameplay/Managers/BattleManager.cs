@@ -34,7 +34,7 @@ public class BattleManager : Singleton<BattleManager>
             }
             else
             {
-                // TODO: Kill all enemies and projectiles
+                // Kill all enemies and projectiles
                 var enemyUnits = GameObject.FindGameObjectsWithTag("Enemy");
                 foreach (var enemy in enemyUnits)
                 {

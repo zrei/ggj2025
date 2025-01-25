@@ -13,14 +13,17 @@ public class SpawnManager : Singleton<SpawnManager>
     [field: SerializeField]
     private List<EnemyUnit> EnemyUnitPrefabs { get; set; }
 
+    private WaveData m_CurrentWaveData;
+
     public DamageText SpawnDamageText(Vector2 spawnPosition)
     {
         return Instantiate(DamageTextPrefab, spawnPosition, Quaternion.identity);
     }
 
-    public void SpawnWave(int id)
+    public void SpawnWave(int waveId)
     {
-        var spawnDataList = DWaveSpawn.GetDataById(id);
+        m_CurrentWaveData = DWave.GetDataById(waveId).Value;
+        var spawnDataList = DWaveSpawn.GetDataById(waveId);
 
         foreach (var waveSpawnData in spawnDataList)
         {
@@ -41,6 +44,7 @@ public class SpawnManager : Singleton<SpawnManager>
     public void SpawnEnemyUnit(int enemyId, Vector2 spawnPosition)
     {
         var enemyUnit = Instantiate(EnemyUnitPrefabs[enemyId], spawnPosition, Quaternion.identity);
-        enemyUnit.Setup(enemyId);
+        enemyUnit.Setup(enemyId, m_CurrentWaveData.AttackMultiplier, m_CurrentWaveData.HpMultiplier,
+            m_CurrentWaveData.MovementSpeedMultiplier, m_CurrentWaveData.ProjectileSpeedMult);
     }
 }

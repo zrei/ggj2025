@@ -107,10 +107,13 @@ public class DEnemy : ScriptableObject, IDataImport
             {
                 Id = CommonUtil.ConvertToInt32(paramList[1]),
                 Attack = CommonUtil.ConvertToInt32(paramList[2]),
-                AttackSpeed = CommonUtil.ConvertToSingle(paramList[3]),
-                Hp = CommonUtil.ConvertToInt32(paramList[4]),
+                Hp = CommonUtil.ConvertToInt32(paramList[3]),
+                AttackSpeed = CommonUtil.ConvertToSingle(paramList[4]),
                 MovementSpeed = CommonUtil.ConvertToSingle(paramList [5]),
-                AttackRange = CommonUtil.ConvertToSingle(paramList [6]),
+                ProjectileSpeed = CommonUtil.ConvertToSingle(paramList[6]),
+                ProjectileTarget = Enum.TryParse(paramList[7], out ProjectileTarget projectileType) ? projectileType : ProjectileTarget.None,
+                ProjectileLifetime = CommonUtil.ConvertToSingle(paramList[8]),
+                NumberOfProjectiles = CommonUtil.ConvertToInt32(paramList[9]),
             };
             s_loadedData.Data.Add(enemyData);
         }
@@ -130,14 +133,34 @@ public struct EnemyData
     public int Attack { get; set; }
 
     [field: SerializeField]
-    public float AttackSpeed { get; set; }
+    public int Hp {  get; set; }
 
     [field: SerializeField]
-    public int Hp {  get; set; }
+    public float AttackSpeed { get; set; }
 
     [field: SerializeField]
     public float MovementSpeed { get; set; }
 
     [field: SerializeField]
-    public float AttackRange { get; set; }
+    public float ProjectileSpeed {  get; set; }
+
+    [field: SerializeField]
+    public ProjectileTarget ProjectileTarget { get; set; }
+
+    [field: SerializeField]
+    public float ProjectileLifetime {  get; set; }
+
+    [field: SerializeField]
+    public int NumberOfProjectiles { get; set; }
+}
+
+public enum ProjectileTarget
+{
+    Player,
+    Enemy,
+    DirtyTile,
+    NeutralTile,
+    CleanTile,
+    NeutralOrCleanTile,
+    None
 }
