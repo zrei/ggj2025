@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
     {
         CurrTileType = TileType.NEUTRAL;
         m_Rigidbody = GetComponent<Rigidbody2D>();
-        m_SpriteRenderer = GetComponent<SpriteRenderer>();
+        m_SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
         m_StopDragThresholdSquared = m_StopDragThreshold * m_StopDragThreshold;
     }
