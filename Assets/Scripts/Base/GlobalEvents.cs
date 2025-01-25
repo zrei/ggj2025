@@ -11,6 +11,8 @@ public static class GlobalEvents
     {
         public static int PlayerMaxHealth = 100;
         public static float ReviveTime = 5f;
+        public static float DirtyDotInterval = 2f;
+        public static int DirtyDotDamage = 1;
         public static VoidEvent OnPlayerStartSliding;
         public static VoidEvent OnPlayerStopSliding;
         public static VoidEvent OnPlayerShoot;

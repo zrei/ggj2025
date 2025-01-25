@@ -18,9 +18,9 @@ MonoBehaviour:
     <Hp>k__BackingField: 30
     <AttackSpeed>k__BackingField: 3
     <MovementSpeed>k__BackingField: 5
-    <AtkType>k__BackingField: 0
+    <AtkType>k__BackingField: 1
     <Speed>k__BackingField: 10
-    <Target>k__BackingField: 0
+    <Target>k__BackingField: 5
     <Duration>k__BackingField: 5
     <Param1>k__BackingField: 1
     <Param2>k__BackingField: 0

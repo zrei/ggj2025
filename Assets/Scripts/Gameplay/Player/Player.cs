@@ -12,7 +12,11 @@ public class Player : Singleton<Player>, IDamagable
 
     public static IntEvent OnPlayerHealthValueChanged;
 
+    #region Timer
     private float m_ReviveCountdownTimer;
+    private bool m_IsOnDirty = false;
+    private float m_CurrDirtyDotTimer;
+    #endregion
 
     protected override void HandleAwake()
     {
@@ -75,8 +79,25 @@ public class Player : Singleton<Player>, IDamagable
             {
                 IsDead = false;
                 InternalIncHp(m_MaxHealth);
-            }
-                
+            }       
         }
+        else if (m_IsOnDirty)
+        {
+            m_CurrDirtyDotTimer += Time.deltaTime;
+            if (m_CurrDirtyDotTimer >= GlobalEvents.Player.DirtyDotInterval)
+            {
+                InternalDecHp(GlobalEvents.Player.DirtyDotDamage);
+                m_CurrDirtyDotTimer = m_CurrDirtyDotTimer % GlobalEvents.Player.DirtyDotInterval;
+            }
+        }
+    }
+
+    public void ToggleStandingOnDirty(bool isOnDirty)
+    {
+        if (!isOnDirty)
+        {
+            m_CurrDirtyDotTimer = 0f;
+        }
+        m_IsOnDirty = isOnDirty;
     }
 }
