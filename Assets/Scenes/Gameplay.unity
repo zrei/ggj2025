@@ -279,7 +279,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <DamageTextPrefab>k__BackingField: {fileID: 2778187166958773830, guid: df197b237cd13cd4d8a7a3cd9c79658e, type: 3}
   <EnemySpawnIndicatorPrefab>k__BackingField: {fileID: 9147029254337856838, guid: 20cbe9f59f023db4e8ed66d958a88e3d, type: 3}
-  <EnemyUnitPrefabs>k__BackingField: []
+  <EnemyUnitPrefabs>k__BackingField:
+  - {fileID: 863540610515141238, guid: a63e4ff7ed926164d9b303a2db396368, type: 3}
 --- !u!1001 &1063363057
 PrefabInstance:
   m_ObjectHideFlags: 0

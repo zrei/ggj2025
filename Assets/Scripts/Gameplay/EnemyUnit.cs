@@ -22,6 +22,8 @@ public class EnemyUnit : MonoBehaviour, IDamagable
     private float m_MovementSpeed;
     private float m_HyperSpeed;
 
+    [SerializeField] private EnemyController m_EnemyController;
+
     private void Awake()
     {
         m_Collider = GetComponentInChildren<Collider2D>();
@@ -37,6 +39,8 @@ public class EnemyUnit : MonoBehaviour, IDamagable
         m_CurrentHealth = health;
         m_MovementSpeed = dEnemy.MovementSpeed * movementSpeedMult;
         m_HyperSpeed = dEnemy.Speed * projectileSpeedMult;
+
+        m_EnemyController.Setup(dEnemy, this);
     }
 
     public void InternalIncHp(int value)

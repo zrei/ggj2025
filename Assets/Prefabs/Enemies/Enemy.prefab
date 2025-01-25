@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 863540610515141238}
   - component: {fileID: 2717136226092739997}
   - component: {fileID: -8238680038728705820}
+  - component: {fileID: 7548537181032278882}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -47,7 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c31d2b44fd14d3245a603aca5016560b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ProjectilePrefab>k__BackingField: {fileID: 0}
+  <ProjectilePrefab>k__BackingField: {fileID: 4752021273597491082, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
+  m_EnemyController: {fileID: 7548537181032278882}
 --- !u!61 &2717136226092739997
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -120,6 +122,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &7548537181032278882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3784714189938929203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b858a2fdd407a4d9607396f661f03c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4856123770095806847
 GameObject:
   m_ObjectHideFlags: 0
