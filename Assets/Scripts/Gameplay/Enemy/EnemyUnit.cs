@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class EnemyUnit : MonoBehaviour, IDamagable
 {
+    [SerializeField] private float m_DamageCooldown = 1f;
     public Transform UnitTransform => transform;
     public bool IsDead {  get; private set; }
 
@@ -18,6 +19,10 @@ public class EnemyUnit : MonoBehaviour, IDamagable
     private float m_AttackSpeed;
     private float m_MovementSpeed;
     private float m_HyperSpeed;
+
+    #region Damage
+    private float m_CurrDamageCooldown = 0f;
+    #endregion
 
     [SerializeField] private EnemyController m_EnemyController;
 
@@ -73,4 +78,32 @@ public class EnemyUnit : MonoBehaviour, IDamagable
         InternalDecHp(m_CurrentHealth);
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (IsDead)
+        {
+            return;
+        }
+
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (m_CurrDamageCooldown > 0)
+                return;
+
+            // TODO: Replace with exposed player velocity
+            float playerSpeed = 10;
+            if (playerSpeed > GlobalEvents.Player.MinimumSpeedForDamage)
+            {
+                float damage = (playerSpeed - GlobalEvents.Player.MinimumSpeedForDamage) * GlobalEvents.Player.DamageScale;
+                m_CurrDamageCooldown = m_DamageCooldown;
+                InternalDecHp(Mathf.FloorToInt(damage));
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (m_CurrDamageCooldown > 0)
+            m_CurrDamageCooldown -= Time.deltaTime;
+    }
 }

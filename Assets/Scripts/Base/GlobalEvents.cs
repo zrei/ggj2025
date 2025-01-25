@@ -14,6 +14,11 @@ public static class GlobalEvents
         public static float ReviveTime = 5f;
         public static float DirtyDotInterval = 2f;
         public static int DirtyDotDamage = 1;
+        public static float MinimumSpeedForDamage = 5f;
+        /// <summary>
+        /// Amount of damage dealt per 1 speed increase from minimum speed
+        /// </summary>
+        public static float DamageScale = 1f;
         public static VoidEvent OnPlayerStartSliding;
         public static VoidEvent OnPlayerStopSliding;
         public static VoidEvent OnPlayerShoot;
