@@ -113,14 +113,13 @@ public class PlayerMovement : MonoBehaviour
     {
         float x = m_Rigidbody.velocity.x;
 
-        // TODO: Change depending on the movement of sprite
         if (x > 0)
         {
-
+            m_SpriteRenderer.flipX = true;
         }
         else if (x < 0)
         {
-
+            m_SpriteRenderer.flipX = false;
         }
     }
 

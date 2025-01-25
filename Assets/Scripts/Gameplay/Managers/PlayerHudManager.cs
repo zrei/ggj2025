@@ -62,8 +62,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         if (BattleManager.Instance.State == GameState.InGame)
         {
             StageTimerText.text = ConvertTimerToDisplay(BattleManager.Instance.StageTimer);
-            // TODO
-            // CleanThresholdText.text = $"{}%"
+            CleanThresholdText.text = $"{Mathf.CeilToInt(GridManager.Instance.GetCleanedPercentage)}%";
         }
     }
 

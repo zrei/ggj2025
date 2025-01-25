@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -58,6 +59,12 @@ public class BattleManager : Singleton<BattleManager>
         // TODO: Reset floors to neutral
 
         CurrentWave++;
+        if (CurrentWave > DWave.GetAllData().Data.Count)
+        {
+            FinishGame();
+            return;
+        }
+
         int timeForStage = DWave.GetDataById(CurrentWave).Value.WaveTime;
         StageTimer = timeForStage;
 
@@ -68,16 +75,11 @@ public class BattleManager : Singleton<BattleManager>
 
     public bool CheckIfPlayerPassed()
     {
-        var dWave = DWave.GetDataById(CurrentWave).Value;
-
-        // TODO: Replace this!
-        //return dWave.CleanThreshold >= the_threshold;
-
-        return true;
+        return Mathf.CeilToInt(GridManager.Instance.GetCleanedPercentage) >= DWave.GetDataById(CurrentWave).Value.CleanThreshold;
     }
 
-    private void FinishGame(bool isWin)
+    private void FinishGame()
     {
-
+        SceneManager.LoadScene("EndGame");
     }
 }
