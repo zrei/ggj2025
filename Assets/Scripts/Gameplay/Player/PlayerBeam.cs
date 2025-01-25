@@ -109,6 +109,11 @@ public class PlayerBeam : Singleton<PlayerBeam>
             return;
         }
 
+        if (BattleManager.Instance.State == GameState.BetweenWaves)
+        {
+            return;
+        }
+
         if (Input.GetMouseButton(0))
         {
             if (!m_IsSliding)

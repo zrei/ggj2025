@@ -71,6 +71,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (BattleManager.Instance.State == GameState.BetweenWaves)
+        {
+            return;
+        }
+
         if (!PlayerBeam.Instance.IsSliding)
         {
             m_Rigidbody.velocity = m_MovementVector.normalized * GetMovementSpeed();
