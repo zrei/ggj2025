@@ -108,6 +108,10 @@ public class DWave : ScriptableObject, IDataImport
                 Id = CommonUtil.ConvertToInt32(paramList[1]),
                 WaveTime = CommonUtil.ConvertToInt32(paramList[2]),
                 CleanThreshold = CommonUtil.ConvertToInt32(paramList[3]),
+                ProjectileSpeedMult = CommonUtil.ConvertToSingle(paramList[4]),
+                MovementSpeedMultiplier = CommonUtil.ConvertToSingle(paramList[5]),
+                HpMultiplier = CommonUtil.ConvertToSingle(paramList[6]),
+                AttackMultiplier = CommonUtil.ConvertToSingle(paramList[7]),
             };
             s_loadedData.Data.Add(waveData);
         }
@@ -128,4 +132,16 @@ public struct WaveData
 
     [field: SerializeField]
     public int CleanThreshold { get; set; }
+
+    [field: SerializeField]
+    public float ProjectileSpeedMult { get; set; }
+
+    [field: SerializeField]
+    public float MovementSpeedMultiplier { get; set; }
+
+    [field: SerializeField]
+    public float HpMultiplier { get; set; }
+
+    [field: SerializeField]
+    public float AttackMultiplier { get; set; }
 }
