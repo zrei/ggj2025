@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
+using System.Collections.Generic;
 public enum TileType
 {
     CLEAN,
@@ -74,8 +74,11 @@ public class GridManager : Singleton<GridManager>
     [Header("Obstacles")]
     [SerializeField] private Grid m_ObstacleGrid = null;
     [SerializeField] private Tilemap m_ObstacleTilemap = null;
-    [SerializeField] private GameObject m_ObstacleRep = null;
-    [SerializeField] private Transform m_ObstacleParent = null;
+
+    [Header("Outer walls")]
+    [SerializeField] private Grid m_WallGrid = null;
+    [SerializeField] private Tilemap m_WallTilemap = null;
+    [SerializeField] private TileBase m_WallTile = null;
 
     // tiles
     private TileState m_TileState;
@@ -91,8 +94,6 @@ public class GridManager : Singleton<GridManager>
 
     protected override void HandleAwake()
     {
-        ClearObstacles();
-
         Vector2 centerPos = transform.position;
         m_LeftXPos = centerPos.x - ((float)(m_NumCols) / 2) * m_TileLength;
         m_BottomYPos = centerPos.y - ((float) (m_NumRows) / 2) * m_TileLength;
@@ -111,7 +112,6 @@ public class GridManager : Singleton<GridManager>
                 if (HasObstacleAtTile(coordinates))
                 {
                     ++m_NumObstacles;
-                    SpawnObstacle(coordinates);
                 }
             }
         }
@@ -184,25 +184,9 @@ public class GridManager : Singleton<GridManager>
     #endregion
 
     #region Obstacle
-    private void SpawnObstacle(Vector2Int tileCoordinates)
-    {
-        GameObject obstacleRep = Instantiate(m_ObstacleRep);
-        obstacleRep.transform.position = GetWorldPositionOfTile(tileCoordinates);
-        obstacleRep.transform.localScale = new Vector3(m_TileLength, m_TileLength, 1);
-        obstacleRep.transform.parent = m_ObstacleParent;
-    }
-
     private bool HasObstacleAtTile(Vector2Int tileCoordinates)
     {
         return m_ObstacleTilemap.GetTile(ConvertToTilemapCoordinates(tileCoordinates)) != null;
-    }
-
-    private void ClearObstacles()
-    {
-        foreach (Transform obstacleRep in m_ObstacleParent)
-        {
-            Destroy(obstacleRep);
-        }
     }
     #endregion
 
@@ -214,12 +198,51 @@ public class GridManager : Singleton<GridManager>
     #region Setup
     public void SetupGrids()
     {
+        m_FloorGrid.transform.parent = null;
+        m_ObstacleGrid.transform.parent = null;
+        m_WallGrid.transform.parent = null;
+        
         transform.localScale = new Vector3(m_NumCols * m_TileLength, m_NumRows * m_TileLength, 1);
         m_FloorGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
         m_ObstacleGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
+        m_WallGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
+
+        SetupWalls();
+        
+        m_FloorGrid.transform.parent = transform;
+        m_ObstacleGrid.transform.parent = transform;
+        m_WallGrid.transform.parent = transform;
+    }
+
+    private void SetupWalls()
+    {
+        m_WallTilemap.ClearAllTiles();
+        for (int r = 0; r < m_NumRows; ++r)
+        {
+            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, r)), m_WallTile);
+            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, r)), m_WallTile);
+        }
+        for (int c = 0; c < m_NumCols; ++c)
+        {
+            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(c, -1)), m_WallTile);
+            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(c, m_NumRows)), m_WallTile);
+        }
+        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, m_NumRows)), m_WallTile);
+        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, -1)), m_WallTile);
+        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, m_NumRows)), m_WallTile);
+        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, -1)), m_WallTile);
+    }
+
+    public void ClearObstacles()
+    {
+        m_ObstacleTilemap.ClearAllTiles();
     }
     #endregion
 #endif
+    private static List<Vector3> Pathfind(Vector2 initialWorldPosition, Vector2 finalWorldPosition)
+    {
+        return new();
+    }
 }
 
 #if UNITY_EDITOR
@@ -242,6 +265,11 @@ public class GridManagerEditor : Editor
         if (GUILayout.Button("Adjust grid"))
         {
             m_GridManager.SetupGrids();
+        }
+
+        if (GUILayout.Button("Clear obstacles"))
+        {
+            m_GridManager.ClearObstacles();
         }
     }
 }
