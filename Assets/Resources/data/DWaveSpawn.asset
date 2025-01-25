@@ -15,9 +15,11 @@ MonoBehaviour:
   <Data>k__BackingField:
   - <Wave>k__BackingField: 1
     <EnemyId>k__BackingField: 0
-    <SpawnPoint>k__BackingField: 3,5
+    <RowSpawnPoint>k__BackingField: 3
+    <ColSpawnPoint>k__BackingField: 5
     <Delay>k__BackingField: 1
   - <Wave>k__BackingField: 1
     <EnemyId>k__BackingField: 0
-    <SpawnPoint>k__BackingField: 7,8
+    <RowSpawnPoint>k__BackingField: 7
+    <ColSpawnPoint>k__BackingField: 8
     <Delay>k__BackingField: 1
