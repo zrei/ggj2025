@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /* The outline of the tutorial:
  * Teach player move (1)
@@ -15,6 +16,8 @@ using UnityEngine;
 
 public class TutorialManager : Singleton<TutorialManager>
 {
+    public bool CanPlayerShoot { get; private set; } // TODO
+
     [field: SerializeField, Header("Text Object")]
     private GameObject TutorialTextObjectParent { get; set; }
 
@@ -26,6 +29,9 @@ public class TutorialManager : Singleton<TutorialManager>
 
     [field: SerializeField, Header("Cameras")]
     private List<CinemachineVirtualCamera> RoomCameras { get; set; }
+
+    [field: SerializeField, Header("Doors")]
+    private List<GameObject> Doors { get; set; }
 
     [field: SerializeField, Header("Move"), TextArea(2, 3)]
     private string WelcomeString { get; set; }
@@ -45,11 +51,17 @@ public class TutorialManager : Singleton<TutorialManager>
     [field: SerializeField, TextArea(2, 3)]
     private string CleanTileText { get; set; }
 
+    [field: SerializeField, TextArea(2, 3)]
+    private string TrashMonsterText { get; set; }
+
     [field: SerializeField, Header("Shoot Logic"), TextArea(2, 3)]
     private string HowToShootText { get; set; }
 
     [field: SerializeField, TextArea(2, 3)]
-    private string HowToSlideText { get; set; }
+    private string SpeedReminderText { get; set; }
+
+    [field: SerializeField, TextArea(2, 3)]
+    private string PlayAroundText { get; set; }
 
     [field: SerializeField, Header("Timer and Quota"), TextArea(2, 3)]
     private string TeachTimerText { get; set; }
@@ -90,25 +102,120 @@ public class TutorialManager : Singleton<TutorialManager>
 
             TutorialText.text = string.Empty;
             PlaySentence(MoveInstructionsString);
+
+            await UniTask.WaitForSeconds(1f);
+            if (!this) return;
+
+            Doors[0].SetActive(false);
         }
         else if (m_CurrentTutorialStep == 2)
         {
+            TutorialTextObjectParent.SetActive(false);
+            Doors[0].SetActive(true);
             SwitchCamera(1);
+
+            await UniTask.WaitForSeconds(1f);
+            if (!this) return;
+
+            TutorialText.text = string.Empty;
+            TutorialTextObjectParent.SetActive(true);
+            PlaySentence(TileTypesText);
+
+            await UniTask.WaitForSeconds(5f);
+            if (!this) return;
+
+            PlaySentence(NeutralTileText);
+
+            await UniTask.WaitForSeconds(5f);
+            if (!this) return;
+
+            PlaySentence(DirtyTileText);
+
+            await UniTask.WaitForSeconds(5f);
+            if (!this) return;
+
+            PlaySentence(CleanTileText);
+
+            await UniTask.WaitForSeconds(5f);
+            if (!this) return;
+
+            PlaySentence(TrashMonsterText);
+
+            await UniTask.WaitForSeconds(5f);
+            if (!this) return;
+
+            Doors[1].SetActive(false);
         }
         else if (m_CurrentTutorialStep == 3)
         {
+            TutorialTextObjectParent.SetActive(false);
+            Doors[1].SetActive(true);
 
+            SwitchCamera(2);
+
+            await UniTask.WaitForSeconds(1f);
+            if (!this) return;
+
+            TutorialText.text = string.Empty;
+            TutorialTextObjectParent.SetActive(true);
+            PlaySentence(HowToShootText);
+
+            await UniTask.WaitForSeconds(5f);
+            if (!this) return;
+
+            PlaySentence(SpeedReminderText);
+
+            await UniTask.WaitForSeconds(5f);
+            if (!this) return;
+
+            PlaySentence(PlayAroundText);
+
+            await UniTask.WaitForSeconds(5f);
+            if (!this) return;
+
+            GoToNextTutorialStep();
         }
         else if (m_CurrentTutorialStep == 4)
         {
+            var timer = 5f;
+            PlaySentence(TeachTimerText);
+            // Make timer flash
+            var timerObject = PlayerHudManager.Instance.StageTimerText.gameObject;
+            while (timer > 0)
+            {
+                timerObject.SetActive(!timerObject.activeSelf);
 
+                await UniTask.WaitForSeconds(0.5f);
+                if (!this) return;
+                timer -= 0.5f;
+            }
+            timerObject.SetActive(true);
+
+            timer = 5f;
+            PlaySentence(TeachQuotaText);
+            // Make timer flash
+            var quotaObject = PlayerHudManager.Instance.CleanThresholdText.gameObject;
+            while (timer > 0)
+            {
+                quotaObject.SetActive(!quotaObject.activeSelf);
+
+                await UniTask.WaitForSeconds(0.5f);
+                if (!this) return;
+                timer -= 0.5f;
+            }
+            timerObject.SetActive(true);
+
+            PlaySentence(ReadyToGoText);
+
+            await UniTask.WaitForSeconds(3f);
+            if (!this) return;
+
+            // End tutorial and open door to next area
+            Doors[2].SetActive(false);
         }
         else
         {
-            TutorialTextObjectParent.SetActive(false);
-
-            // End tutorial and open door to next area
-            // TODO
+            SceneManager.LoadScene("Gameplay");
         }
     }
 
