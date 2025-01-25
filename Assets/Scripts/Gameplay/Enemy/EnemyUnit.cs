@@ -21,14 +21,21 @@ public class EnemyUnit : MonoBehaviour, IDamagable
     private float m_HyperSpeed;
 
     #region Damage
+    private SpriteRenderer m_SR;
     private float m_CurrDamageCooldown = 0f;
     #endregion
 
     [SerializeField] private EnemyController m_EnemyController;
 
+    [SerializeField] private Color m_DamagedFlashColor = Color.red;
+    [SerializeField] private float m_DamagedFlashInterval = 0.2f;
+
+    private Coroutine m_CurrentlyPlayingFlashCoroutine;
+
     private void Awake()
     {
         m_Collider = GetComponentInChildren<Collider2D>();
+        m_SR = GetComponentInChildren<SpriteRenderer>();
     }
 
     public void Setup(int id, float attackMult, float hpMult, float movementSpeedMult, float projectileSpeedMult)
@@ -56,6 +63,12 @@ public class EnemyUnit : MonoBehaviour, IDamagable
         {
             return;
         }
+
+        if (m_CurrentlyPlayingFlashCoroutine != null)
+        {
+            StopCoroutine(m_CurrentlyPlayingFlashCoroutine);
+        }
+        m_CurrentlyPlayingFlashCoroutine = StartCoroutine(FlashRedOnDamage());
 
         m_CurrentHealth -= value;
         if (m_CurrentHealth <= 0)
@@ -87,13 +100,15 @@ public class EnemyUnit : MonoBehaviour, IDamagable
 
         if (other.gameObject.CompareTag("Player"))
         {
+            
             if (m_CurrDamageCooldown > 0)
                 return;
-
+            Debug.Log("Weh");
             float playerSpeed = PlayerBeam.Instance.SpeedMagnitude;
             if (playerSpeed > GlobalEvents.Player.MinimumSpeedForDamage)
             {
                 float damage = (playerSpeed - GlobalEvents.Player.MinimumSpeedForDamage) * GlobalEvents.Player.DamageScale;
+                Debug.Log(damage);
                 m_CurrDamageCooldown = m_DamageCooldown;
                 InternalDecHp(Mathf.FloorToInt(damage));
             }
@@ -104,5 +119,20 @@ public class EnemyUnit : MonoBehaviour, IDamagable
     {
         if (m_CurrDamageCooldown > 0)
             m_CurrDamageCooldown -= Time.deltaTime;
+    }
+
+    private IEnumerator FlashRedOnDamage()
+    {
+        m_SR.color = m_DamagedFlashColor;
+
+        float t = 0f;
+
+        while (t < m_DamagedFlashInterval)
+        {
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        m_SR.color = Color.white;
     }
 }
