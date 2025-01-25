@@ -49,10 +49,11 @@ public class TileState
         {
             for (int c = 0; c < m_NumCols; ++c)
             {
-                if (GetTileTypeAtTile(new Vector2Int(m_NumCols, m_NumRows)) == TileType.CLEAN)
+                if (GetTileTypeAtTile(new Vector2Int(c, r)) == TileType.CLEAN)
                     ++numCleanedTiles;
             }
         }
+
         return (float)numCleanedTiles / (m_NumRows * m_NumCols - numObstacles);
     }
 }
@@ -218,7 +219,7 @@ public class GridManager : Singleton<GridManager>
     #endregion
 
     #region Quota
-    public float GetCleanedPercentage => m_TileState.GetCleanedTiles(m_NumObstacles);
+    public float GetCleanedPercentage => m_TileState.GetCleanedTiles(m_NumObstacles) * 100;
     #endregion
 
 #if UNITY_EDITOR
@@ -259,7 +260,7 @@ public class GridManager : Singleton<GridManager>
 #endif
 
     #region Pathfinding
-    private static TileType[] GetFilteredTileTypes(TargetType targetType)
+    private static TileType[] GetFilteredTileTypes(TargetType? targetType)
     {
         return targetType switch
         {
@@ -269,6 +270,7 @@ public class GridManager : Singleton<GridManager>
             TargetType.CleanTile => new TileType[] {TileType.CLEAN},
             TargetType.NeutralTile => new TileType[] {TileType.NEUTRAL},
             TargetType.NeutralOrCleanTile => new TileType[] {TileType.NEUTRAL, TileType.CLEAN},
+            null => new TileType[] {TileType.CLEAN, TileType.NEUTRAL, TileType.DIRTY},
             _ => new TileType[] {}
         };
     }
@@ -293,15 +295,15 @@ public class GridManager : Singleton<GridManager>
         }
         return allowedTileTargets;
     }
-    /*
-    public bool IsPositionValid(Vector3 worldPosition)
+    
+    public bool IsPositionValid(Vector2 worldPosition)
     {
         Vector2Int tileCoordinates = CalculateTileCoordinates(worldPosition);
         return IsCoordinatesValid(tileCoordinates) && !HasObstacleAtTile(tileCoordinates); 
     }
-    */
+    
 
-    public List<Vector2> GetRandomTileLocations(Vector2 currWorldPosition, TargetType targetType, params Vector2[] excludedPositions)
+    public List<Vector2> GetRandomTileLocations(Vector2 currWorldPosition, TargetType? targetType, params Vector2[] excludedPositions)
     {
         Vector2Int currPosition = CalculateTileCoordinates(currWorldPosition);
         HashSet<Vector2Int> excludedPositionsSet = new();

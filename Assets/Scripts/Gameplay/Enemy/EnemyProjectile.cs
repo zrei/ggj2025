@@ -33,7 +33,7 @@ public class EnemyProjectile : MonoBehaviour
     {
         if (!m_IsUsed)
         {
-            if (m_HasPreviousPosition)
+            if (m_HasPreviousPosition && GridManager.Instance.IsPositionValid(m_Rigidbody.position))
                 GridManager.Instance.SetTileStatus(m_Rigidbody.position, TileType.DIRTY);
             m_Rigidbody.velocity = m_Direction * m_Speed;
 

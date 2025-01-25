@@ -59,5 +59,6 @@ public class Player : Singleton<Player>, IDamagable
     private void OnDeath()
     {
         // TODO
+        IsDead = true;
     }
 }

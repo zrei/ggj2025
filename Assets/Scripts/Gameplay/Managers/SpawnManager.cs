@@ -20,11 +20,6 @@ public class SpawnManager : Singleton<SpawnManager>
         return Instantiate(DamageTextPrefab, spawnPosition, Quaternion.identity);
     }
 
-    protected override void HandleAwake()
-    {
-        base.HandleAwake();
-        SpawnWave(1);
-    }
     public void SpawnWave(int waveId)
     {
         m_CurrentWaveData = DWave.GetDataById(waveId).Value;

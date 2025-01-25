@@ -23,6 +23,14 @@ public class BattleManager : Singleton<BattleManager>
     {
         CurrentWave = 0;
         StageTimer = 0f;
+
+        StartCoroutine(BeginGame());
+    }
+
+    private IEnumerator BeginGame()
+    {
+        yield return new WaitForSeconds(1);
+        NextWave();
     }
 
     private void Update()

@@ -21,7 +21,7 @@ public class DamageInfo
 
     public void ProcessDamage()
     {
-        if (m_Target != null)
+        if (m_Target == null)
         {
             return;
         }

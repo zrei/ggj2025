@@ -33,7 +33,7 @@ public class EnemyController : MonoBehaviour
         if (!isHyper)
         {
             EnemyMoveBehaviour enemyMoveBehaviour = new EnemyMoveBehaviour();
-            enemyMoveBehaviour.Setup(enemyUnit, GetComponent<Rigidbody2D>(), enemyData.MovementSpeed, enemyData.Param1, new EnemyMoveBehaviour.AdditionalMoveBehaviourData() { m_TileTargetType = enemyData.Target });
+            enemyMoveBehaviour.Setup(enemyUnit, GetComponent<Rigidbody2D>(), enemyData.MovementSpeed, enemyData.Param1, new EnemyMoveBehaviour.AdditionalMoveBehaviourData() { m_TileTargetType = null });
             enemyControllerState = new EnemyControllerState() { m_EnemyBehaviour = enemyMoveBehaviour, m_TimeToLast = 1 / enemyData.AttackSpeed };
         }
         else

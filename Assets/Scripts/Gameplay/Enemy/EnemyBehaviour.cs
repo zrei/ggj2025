@@ -23,7 +23,7 @@ public class EnemyMoveBehaviour : EnemyBehaviour
 {
     public struct AdditionalMoveBehaviourData
     {
-        public TargetType m_TileTargetType;
+        public TargetType? m_TileTargetType;
     }
 
     private AdditionalMoveBehaviourData m_AdditionalData;
