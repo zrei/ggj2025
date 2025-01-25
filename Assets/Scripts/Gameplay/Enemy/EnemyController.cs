@@ -9,17 +9,20 @@ public struct EnemyControllerState
 
 public class EnemyController : MonoBehaviour
 {
-    private EnemyControllerState m_NormalState;
-    private EnemyControllerState m_HyperState;
-
     [Header("Projectiles")]
     [SerializeField] private EnemyThrowBehaviour.AdditionalEnemyThrowData m_ProjectileData;
+
+    private EnemyControllerState m_NormalState;
+    private EnemyControllerState m_HyperState;
 
     private float m_CurrCooldown = 0;
     private bool m_IsHyper = false;
 
+    private EnemyUnit m_EnemyUnit;
+
     public void Setup(EnemyData enemyData, EnemyUnit enemyUnit)
     {
+        m_EnemyUnit = enemyUnit;
         SetupState(ref m_NormalState, enemyData, enemyUnit, false);
         SetupState(ref m_HyperState, enemyData, enemyUnit, true);
         m_NormalState.m_EnemyBehaviour.Enter();
@@ -52,6 +55,9 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
+        if (m_EnemyUnit.IsDead)
+            return;
+
         m_CurrCooldown += Time.deltaTime;
         if (m_CurrCooldown > GetCurrDuration)
         {

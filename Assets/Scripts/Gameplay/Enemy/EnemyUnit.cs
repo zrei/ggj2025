@@ -10,14 +10,11 @@ public class EnemyUnit : MonoBehaviour, IDamagable
     public Transform UnitTransform => transform;
     public bool IsDead {  get; private set; }
 
-    [field: SerializeField]
-    public EnemyProjectile ProjectilePrefab { get; set; }
-
     private Collider2D m_Collider;
 
     private int m_MaxHealth;
     private int m_CurrentHealth;
-    private int m_Attack;
+    public int Attack { get; private set; }
     private float m_AttackSpeed;
     private float m_MovementSpeed;
     private float m_HyperSpeed;
@@ -34,7 +31,7 @@ public class EnemyUnit : MonoBehaviour, IDamagable
         var dEnemy = DEnemy.GetDataById(id).Value;
         var health = Mathf.CeilToInt(dEnemy.Hp * hpMult);
 
-        m_Attack = Mathf.CeilToInt(dEnemy.Attack * attackMult);
+        Attack = Mathf.CeilToInt(dEnemy.Attack * attackMult);
         m_MaxHealth = health;
         m_CurrentHealth = health;
         m_MovementSpeed = dEnemy.MovementSpeed * movementSpeedMult;

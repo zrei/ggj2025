@@ -272,12 +272,14 @@ public class GridManager : Singleton<GridManager>
         int randomCol = Random.Range(0, m_NumCols - 1);
         int randomRow = Random.Range(0, m_NumRows - 1);
         Vector2Int randomCoordinates = new Vector2Int(randomCol, randomRow);
-
-        while (randomCoordinates == currPosition || HasObstacleAtTile(randomCoordinates))
+        
+        int i = 0;
+        while ((randomCoordinates == currPosition || HasObstacleAtTile(randomCoordinates)) && i < 50)
         {
             randomCol = Random.Range(0, m_NumCols - 1);
             randomRow = Random.Range(0, m_NumRows - 1);
             randomCoordinates = new Vector2Int(randomCol, randomRow);
+            ++i;
         }
 
         return Pathfind(currPosition, randomCoordinates, false);
@@ -285,7 +287,7 @@ public class GridManager : Singleton<GridManager>
 
     private bool IsCoordinatesValid(Vector2Int tileCoordinates)
     {
-        return tileCoordinates.x >= 0 && tileCoordinates.x < m_NumCols && tileCoordinates.x >= 0 && tileCoordinates.y < m_NumRows;
+        return tileCoordinates.x >= 0 && tileCoordinates.x < m_NumCols && tileCoordinates.y >= 0 && tileCoordinates.y < m_NumRows;
     }
 
     public List<Vector2> Pathfind(Vector2 initialWorldPosition, Vector2 finalWorldPosition, bool removeFinalPosition = true)
@@ -319,11 +321,17 @@ public class GridManager : Singleton<GridManager>
     {
         PathNode currTile = new(initialTile);
         Queue<PathNode> queue = new();
+        HashSet<Vector2Int> visitedLocations = new();
         queue.Enqueue(currTile);
 
         while (queue.Count > 0)
         {
             PathNode curr = queue.Dequeue();
+
+            if (visitedLocations.Contains(curr.m_Coordinates))
+                continue;
+
+            visitedLocations.Add(curr.m_Coordinates);
 
             if (curr.m_Coordinates == finalTile)
                 return curr.GetTilesToMoveTo();

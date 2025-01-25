@@ -10,6 +10,11 @@ public class EnemyProjectile : MonoBehaviour
     private float m_Speed;
 
     private bool m_IsUsed;
+
+    private void Start()
+    {
+        m_Rigidbody = GetComponent<Rigidbody2D>();
+    }
     /*
      * Called by enemy behaviour
      */
