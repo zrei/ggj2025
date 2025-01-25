@@ -103,12 +103,11 @@ public class EnemyUnit : MonoBehaviour, IDamagable
             
             if (m_CurrDamageCooldown > 0)
                 return;
-            Debug.Log("Weh");
+
             float playerSpeed = PlayerBeam.Instance.SpeedMagnitude;
             if (playerSpeed > GlobalEvents.Player.MinimumSpeedForDamage)
             {
                 float damage = (playerSpeed - GlobalEvents.Player.MinimumSpeedForDamage) * GlobalEvents.Player.DamageScale;
-                Debug.Log(damage);
                 m_CurrDamageCooldown = m_DamageCooldown;
                 InternalDecHp(Mathf.FloorToInt(damage));
             }
