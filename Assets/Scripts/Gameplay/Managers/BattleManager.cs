@@ -70,11 +70,12 @@ public class BattleManager : Singleton<BattleManager>
         }
     }
 
-    public void NextWave()
+    public void NextWave(bool increaseWave = true)
     {
         GlobalEvents.Waves.OnWaveStartEvent?.Invoke();
 
-        CurrentWave++;
+        if (increaseWave)
+            CurrentWave++;
         if (CurrentWave > DWave.GetAllData().Data.Count)
         {
             FinishGame();
