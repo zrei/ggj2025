@@ -12,6 +12,8 @@ public class Player : Singleton<Player>, IDamagable
 
     public static IntEvent OnPlayerHealthValueChanged;
 
+    private float m_ReviveCountdownTimer;
+
     protected override void HandleAwake()
     {
         m_MaxHealth = GlobalEvents.Player.PlayerMaxHealth;
@@ -44,8 +46,8 @@ public class Player : Singleton<Player>, IDamagable
             return;
         }
 
-        m_CurrentHealth -= value;
-        if (m_CurrentHealth < 0)
+        m_CurrentHealth = Mathf.Max(m_CurrentHealth - value, 0);
+        if (m_CurrentHealth <= 0)
         {
             OnPlayerHealthValueChanged?.Invoke(0);
             OnDeath();
@@ -60,5 +62,21 @@ public class Player : Singleton<Player>, IDamagable
     {
         // TODO
         IsDead = true;
+        m_ReviveCountdownTimer = GlobalEvents.Player.ReviveTime;
+        GlobalEvents.Player.OnPlayerDeath?.Invoke();
+    }
+
+    private void Update()
+    {
+        if (IsDead)
+        {
+            m_ReviveCountdownTimer -= Time.deltaTime;
+            if (m_ReviveCountdownTimer <= 0)
+            {
+                IsDead = false;
+                InternalIncHp(m_MaxHealth);
+            }
+                
+        }
     }
 }

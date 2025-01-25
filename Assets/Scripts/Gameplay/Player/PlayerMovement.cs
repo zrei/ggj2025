@@ -61,6 +61,13 @@ public class PlayerMovement : MonoBehaviour
         m_SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
         m_StopDragThresholdSquared = m_StopDragThreshold * m_StopDragThreshold;
+
+        GlobalEvents.Player.OnPlayerDeath += OnPlayerDeath;
+    }
+
+    private void OnDestroy()
+    {
+        GlobalEvents.Player.OnPlayerDeath -= OnPlayerDeath;
     }
 
     private void Update()
@@ -90,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetPlayerInputs()
     {
-        if (!m_IsSliding && Input.GetMouseButtonDown(0))
+        if (!m_IsSliding && !Player.Instance.IsDead && Input.GetMouseButtonDown(0))
         {
             m_Rigidbody.velocity = Vector2.zero;
             m_Rigidbody.drag = GetDrag();
@@ -101,9 +108,7 @@ public class PlayerMovement : MonoBehaviour
         else if (m_IsSliding && m_Rigidbody.velocity.sqrMagnitude < m_PreviousVelocity.sqrMagnitude && m_Rigidbody.velocity.sqrMagnitude < m_StopDragThresholdSquared)
         {
             // exit slide
-            m_IsSliding = false;
-            m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
-            GlobalEvents.Player.OnPlayerStopSliding?.Invoke();
+            ExitSlide();
         }
  
         m_MovementVector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -152,5 +157,18 @@ public class PlayerMovement : MonoBehaviour
             TileType.NEUTRAL => NeutralDragAmount,
             _ => 0,
         };
+    }
+
+    private void ExitSlide()
+    {
+        // exit slide
+        m_IsSliding = false;
+        m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
+        GlobalEvents.Player.OnPlayerStopSliding?.Invoke();
+    }
+    private void OnPlayerDeath()
+    {
+        if (m_IsSliding)
+            ExitSlide();
     }
 }

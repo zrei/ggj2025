@@ -10,9 +10,11 @@ public static class GlobalEvents
     public static class Player
     {
         public static int PlayerMaxHealth = 100;
+        public static float ReviveTime = 5f;
         public static VoidEvent OnPlayerStartSliding;
         public static VoidEvent OnPlayerStopSliding;
         public static VoidEvent OnPlayerShoot;
         public static VoidEvent OnPlayerMove;
+        public static VoidEvent OnPlayerDeath;
     }
 }

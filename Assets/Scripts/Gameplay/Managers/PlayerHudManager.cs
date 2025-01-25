@@ -131,7 +131,6 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     private void OnPlayerHealthValueChanged(int value)
     {
-        Debug.Log("set to " + value);
         PlayerHealthSlider.value = value; 
     }
 
