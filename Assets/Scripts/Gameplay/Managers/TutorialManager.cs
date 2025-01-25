@@ -16,7 +16,7 @@ using UnityEngine.SceneManagement;
 
 public class TutorialManager : Singleton<TutorialManager>
 {
-    public bool CanPlayerShoot { get; private set; } // TODO
+    public bool CanPlayerShoot { get; private set; }
 
     [field: SerializeField, Header("Text Object")]
     private GameObject TutorialTextObjectParent { get; set; }
@@ -77,6 +77,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
     protected override void HandleAwake()
     {
+        CanPlayerShoot = false;
         m_CurrentTutorialStep = 0;
         DelayBeforeStartingTutorial();
     }
@@ -159,6 +160,8 @@ public class TutorialManager : Singleton<TutorialManager>
             TutorialText.text = string.Empty;
             TutorialTextObjectParent.SetActive(true);
             PlaySentence(HowToShootText);
+
+            CanPlayerShoot = true;
 
             await UniTask.WaitForSeconds(5f);
             if (!this) return;

@@ -180,7 +180,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.07655683, y: -0.13979939}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -191,7 +191,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.84688634, y: 0.7204012}
+  m_Size: {x: 0.85, y: 0.72}
   m_EdgeRadius: 0
 --- !u!114 &4922691725510694682
 MonoBehaviour:
@@ -217,6 +217,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5287633b5fd5ecb4481cea428a521ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BeamTime: 5
+  <BeamCooldown>k__BackingField: 2
+  <SlideForce>k__BackingField: 10
+  <CleanDragAmount>k__BackingField: 0.2
+  <NeutralDragAmount>k__BackingField: 0.4
+  <DirtyDragAmount>k__BackingField: 0.8
 --- !u!114 &3905510604897532066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,8 +238,3 @@ MonoBehaviour:
   <DirtyMovementSpeed>k__BackingField: 3
   <NeutralMovementSpeed>k__BackingField: 4
   <CleanMovementSpeed>k__BackingField: 10
-  m_InitialSlideForce: 500
-  <CleanDragAmount>k__BackingField: 0.2
-  <NeutralDragAmount>k__BackingField: 0.4
-  <DirtyDragAmount>k__BackingField: 0.8
-  m_StopDragThreshold: 4
