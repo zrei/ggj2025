@@ -19,8 +19,18 @@ public class Player : Singleton<Player>, IDamagable
     #endregion
 
     #region Visuals
+    private SpriteRenderer m_SR;
+    [SerializeField] private Color m_DamagedFlashColor = Color.red;
+    [SerializeField] private float m_DamagedFlashInterval = 0.5f;
+    [SerializeField] private float m_DeadAlphaValue = 0.5f;
 
+    private Coroutine m_CurrentlyPlayingFlashCoroutine;
     #endregion
+
+    private void Start()
+    {
+        m_SR = GetComponentInChildren<SpriteRenderer>();
+    }
 
     protected override void HandleAwake()
     {
@@ -65,6 +75,12 @@ public class Player : Singleton<Player>, IDamagable
             return;
         }
 
+        if (m_CurrentlyPlayingFlashCoroutine != null)
+        {
+            StopCoroutine(m_CurrentlyPlayingFlashCoroutine);    
+        }
+        m_CurrentlyPlayingFlashCoroutine = StartCoroutine(FlashRedOnDamage());
+
         m_CurrentHealth = Mathf.Max(m_CurrentHealth - value, 0);
         if (m_CurrentHealth <= 0)
         {
@@ -82,6 +98,16 @@ public class Player : Singleton<Player>, IDamagable
         // TODO
         IsDead = true;
         m_ReviveCountdownTimer = GlobalEvents.Player.ReviveTime;
+        if (m_CurrentlyPlayingFlashCoroutine != null)
+        {
+            StopCoroutine(m_CurrentlyPlayingFlashCoroutine);
+            m_CurrentlyPlayingFlashCoroutine = null;
+        }
+
+        Color deadColor = Color.white;
+        deadColor.a = m_DeadAlphaValue;
+        m_SR.color = deadColor;
+
         GlobalEvents.Player.OnPlayerDeath?.Invoke();
     }
 
@@ -93,6 +119,7 @@ public class Player : Singleton<Player>, IDamagable
             if (m_ReviveCountdownTimer <= 0)
             {
                 IsDead = false;
+                m_SR.color = Color.white;
                 InternalIncHp(m_MaxHealth);
             }       
         }
@@ -114,5 +141,20 @@ public class Player : Singleton<Player>, IDamagable
             m_CurrDirtyDotTimer = 0f;
         }
         m_IsOnDirty = isOnDirty;
+    }
+
+    private IEnumerator FlashRedOnDamage()
+    {
+        m_SR.color = Color.red;
+
+        float t = 0f;
+
+        while (t < m_DamagedFlashInterval)
+        {
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        m_SR.color = Color.white;
     }
 }

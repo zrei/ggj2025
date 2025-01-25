@@ -10,7 +10,7 @@ public static class GlobalEvents
 {
     public static class Player
     {
-        public static int PlayerMaxHealth = 100;
+        public static int PlayerMaxHealth = 10;
         public static float ReviveTime = 5f;
         public static float DirtyDotInterval = 2f;
         public static int DirtyDotDamage = 1;
