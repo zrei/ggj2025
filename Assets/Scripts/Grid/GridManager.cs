@@ -95,9 +95,9 @@ public class GridManager : Singleton<GridManager>
     [Header("Tile Visuals")]
     [SerializeField] private Grid m_FloorGrid = null;
     [SerializeField] private Tilemap m_FloorTilemap = null;
-    [SerializeField] private TileBase m_PaintedTile = null;
-    [SerializeField] private TileBase m_DirtyTile = null;
-    [SerializeField] private TileBase m_NeutralTile = null;
+    [SerializeField] private TileBase[] m_PaintedTiles = null;
+    [SerializeField] private TileBase[] m_DirtyTiles = null;
+    [SerializeField] private TileBase[] m_NeutralTiles = null;
 
     [Header("Obstacles")]
     [SerializeField] private Grid m_ObstacleGrid = null;
@@ -210,12 +210,18 @@ public class GridManager : Singleton<GridManager>
     {
         return tileType switch
         {
-            TileType.NEUTRAL => m_NeutralTile,
-            TileType.DIRTY => m_DirtyTile,
-            TileType.CLEAN => m_PaintedTile,
+            TileType.NEUTRAL => GetRandomTile(m_NeutralTiles),
+            TileType.DIRTY => GetRandomTile(m_DirtyTiles),
+            TileType.CLEAN => GetRandomTile(m_PaintedTiles),
             _ => null
         };
     }
+
+    private TileBase GetRandomTile(TileBase[] tiles)
+    {
+        return tiles[UnityEngine.Random.Range(0, tiles.Length - 1)];
+    }
+
     private void SetTileVisuals(Vector2Int tileCoordinates, TileType tileType)
     {
         // update visuals

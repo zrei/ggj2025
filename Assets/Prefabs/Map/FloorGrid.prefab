@@ -1388,9 +1388,12 @@ MonoBehaviour:
   m_TileLength: 0.64
   m_FloorGrid: {fileID: 4677917489247210225}
   m_FloorTilemap: {fileID: 7821982231551965560}
-  m_PaintedTile: {fileID: 11400000, guid: 44f49bda134653b41bb524857ea51048, type: 2}
-  m_DirtyTile: {fileID: 11400000, guid: 1495e21d53ae2c74681ed763d3b3536d, type: 2}
-  m_NeutralTile: {fileID: 11400000, guid: 9e6bd24df8f18cb4989610f7ad85173d, type: 2}
+  m_PaintedTiles:
+  - {fileID: 11400000, guid: 44f49bda134653b41bb524857ea51048, type: 2}
+  m_DirtyTiles:
+  - {fileID: 11400000, guid: 1495e21d53ae2c74681ed763d3b3536d, type: 2}
+  m_NeutralTiles:
+  - {fileID: 11400000, guid: 9e6bd24df8f18cb4989610f7ad85173d, type: 2}
   m_ObstacleGrid: {fileID: 4498856889343975565}
   m_ObstacleTilemap: {fileID: 7520429215958342552}
   m_WallGrid: {fileID: 8949653379030042}
