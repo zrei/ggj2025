@@ -42,6 +42,7 @@ public class Player : Singleton<Player>, IDamagable
         IsDead = false;
 
         GlobalEvents.Player.OnPlayerMoveOntoTile += ToggleStandingOnDirty;
+        GlobalEvents.Waves.OnWaveStartEvent += ResetState;
     }
 
     protected override void HandleDestroy()
@@ -49,6 +50,7 @@ public class Player : Singleton<Player>, IDamagable
         base.HandleDestroy();
 
         GlobalEvents.Player.OnPlayerMoveOntoTile -= ToggleStandingOnDirty;
+        GlobalEvents.Waves.OnWaveStartEvent -= ResetState;
     }
 
     public void ResetPlayer()
@@ -95,7 +97,6 @@ public class Player : Singleton<Player>, IDamagable
 
     private void OnDeath()
     {
-        // TODO
         IsDead = true;
         m_ReviveCountdownTimer = GlobalEvents.Player.ReviveTime;
         if (m_CurrentlyPlayingFlashCoroutine != null)
@@ -113,6 +114,9 @@ public class Player : Singleton<Player>, IDamagable
 
     private void Update()
     {
+        if (BattleManager.Instance.State == GameState.BetweenWaves)
+            return;
+
         if (IsDead)
         {
             m_ReviveCountdownTimer -= Time.deltaTime;
@@ -156,5 +160,19 @@ public class Player : Singleton<Player>, IDamagable
         }
 
         m_SR.color = Color.white;
+    }
+
+    private void ResetState()
+    {
+        InternalIncHp(m_MaxHealth);
+        IsDead = false;
+        if (m_CurrentlyPlayingFlashCoroutine != null)
+        {
+            StopCoroutine(m_CurrentlyPlayingFlashCoroutine);
+            m_CurrentlyPlayingFlashCoroutine = null;
+        }
+        m_SR.color = Color.white;
+        m_IsOnDirty = false;
+        m_CurrDirtyDotTimer = 0;
     }
 }

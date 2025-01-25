@@ -68,16 +68,21 @@ public class PlayerMovement : MonoBehaviour
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
         m_StopDragThresholdSquared = m_StopDragThreshold * m_StopDragThreshold;
 
-        GlobalEvents.Player.OnPlayerDeath += OnPlayerDeath;
+        GlobalEvents.Player.OnPlayerDeath += OnSlideEndEvent;
+        GlobalEvents.Waves.OnWaveEndEvent += OnSlideEndEvent;
     }
 
     private void OnDestroy()
     {
-        GlobalEvents.Player.OnPlayerDeath -= OnPlayerDeath;
+        GlobalEvents.Player.OnPlayerDeath -= OnSlideEndEvent;
+        GlobalEvents.Waves.OnWaveEndEvent -= OnSlideEndEvent;
     }
 
     private void Update()
     {
+        if (BattleManager.Instance.State == GameState.BetweenWaves)
+            return;
+
         if (m_IsSliding)
         {
             GridManager.Instance.SetTileStatus(m_PreviousWorldPosition, TileType.CLEAN);
@@ -137,6 +142,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (BattleManager.Instance.State == GameState.BetweenWaves)
+            return;
+
         if (!m_IsSliding)
         {
             m_Rigidbody.velocity = m_MovementVector.normalized * GetMovementSpeed();
@@ -173,7 +181,8 @@ public class PlayerMovement : MonoBehaviour
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
         GlobalEvents.Player.OnPlayerStopSliding?.Invoke();
     }
-    private void OnPlayerDeath()
+
+    private void OnSlideEndEvent()
     {
         if (m_IsSliding)
             ExitSlide();

@@ -26,4 +26,10 @@ public static class GlobalEvents
         public static VoidEvent OnPlayerDeath;
         public static BoolEvent OnPlayerMoveOntoTile;
     }
+
+    public static class Waves
+    {
+        public static VoidEvent OnWaveEndEvent;
+        public static VoidEvent OnWaveStartEvent;
+    }
 }

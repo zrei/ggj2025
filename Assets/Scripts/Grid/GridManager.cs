@@ -122,6 +122,8 @@ public class GridManager : Singleton<GridManager>
 
     protected override void HandleAwake()
     {
+        base.HandleAwake();
+
         Vector2 centerPos = transform.position;
         m_LeftXPos = centerPos.x - ((float)(m_NumCols) / 2) * m_TileLength;
         m_BottomYPos = centerPos.y - ((float) (m_NumRows) / 2) * m_TileLength;
@@ -143,6 +145,15 @@ public class GridManager : Singleton<GridManager>
                 }
             }
         }
+
+        GlobalEvents.Waves.OnWaveStartEvent += ResetTilesToNeutral;
+    }
+
+    protected override void HandleDestroy()
+    {
+        base.HandleDestroy();
+
+        GlobalEvents.Waves.OnWaveStartEvent -= ResetTilesToNeutral;
     }
 
     #region Tile Status
@@ -166,7 +177,7 @@ public class GridManager : Singleton<GridManager>
         SetTileVisuals(tileCoordinates, tileType);
     }
 
-    public void ResetTilesToNeutral()
+    private void ResetTilesToNeutral()
     {
         for (int r = 0; r < m_NumRows; ++r)
         {
