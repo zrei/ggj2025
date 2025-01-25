@@ -13,9 +13,13 @@ public enum TileType
 public class TileState
 {
     private TileType[,] m_TileStates;
+    private int m_NumRows;
+    private int m_NumCols;
 
     public TileState(int numRows, int numCols)
     {
+        m_NumRows = numRows;
+        m_NumCols = numCols;
         m_TileStates = new TileType[numRows, numCols];
         for (int r = 0; r < numRows; ++r)
         {
@@ -35,6 +39,21 @@ public class TileState
     {
         m_TileStates[tileCoordinates.y, tileCoordinates.x] = tileType;
     }
+
+    public float GetCleanedTiles(int numObstacles)
+    {
+        // TODO: Account for obstacles
+        int numCleanedTiles = 0;
+        for (int r = 0; r < m_NumRows; ++r)
+        {
+            for (int c = 0; c < m_NumCols; ++c)
+            {
+                if (GetTileTypeAtTile(new Vector2Int(m_NumCols, m_NumRows)) == TileType.CLEAN)
+                    ++numCleanedTiles;
+            }
+        }
+        return (float)numCleanedTiles / (m_NumRows * m_NumCols - numObstacles);
+    }
 }
 
 public class GridManager : Singleton<GridManager>
@@ -45,39 +64,57 @@ public class GridManager : Singleton<GridManager>
     [Tooltip("Scale will be set to this")]
     [SerializeField] private float m_TileLength = 1;
 
-    [Header("Visuals")]
-    [SerializeField] private Grid m_Grid = null;
-    [SerializeField] private Tilemap m_Tilemap = null;
+    [Header("Tile Visuals")]
+    [SerializeField] private Grid m_FloorGrid = null;
+    [SerializeField] private Tilemap m_FloorTilemap = null;
     [SerializeField] private TileBase m_PaintedTile = null;
     [SerializeField] private TileBase m_DirtyTile = null;
     [SerializeField] private TileBase m_NeutralTile = null;
 
-    public int NumRows => m_NumRows;
-    public int NumCols => m_NumCols;
-    public float TileLength => m_TileLength;
-    public Grid Grid => m_Grid;
+    [Header("Obstacles")]
+    [SerializeField] private Grid m_ObstacleGrid = null;
+    [SerializeField] private Tilemap m_ObstacleTilemap = null;
+    [SerializeField] private GameObject m_ObstacleRep = null;
+    [SerializeField] private Transform m_ObstacleParent = null;
 
+    // tiles
     private TileState m_TileState;
 
     // grid calculations
     private float m_LeftXPos;
     private float m_BottomYPos;
+    private float m_LeftSquareCenter;
+    private float m_BottomSquareCenter;
+
+    // obstacles
+    private int m_NumObstacles = 0;
 
     protected override void HandleAwake()
     {
+        ClearObstacles();
+
+        Vector2 centerPos = transform.position;
+        m_LeftXPos = centerPos.x - ((float)(m_NumCols) / 2) * m_TileLength;
+        m_BottomYPos = centerPos.y - ((float) (m_NumRows) / 2) * m_TileLength;
+        m_LeftSquareCenter = centerPos.x - ((float)(m_NumCols - 1) / 2) * m_TileLength;
+        m_BottomSquareCenter = centerPos.y - ((float)(m_NumRows - 1) / 2) * m_TileLength;
+
         m_TileState = new TileState(m_NumRows, m_NumCols);
 
         for (int r = 0; r < m_NumRows; ++r)
         {
             for (int c = 0; c < m_NumCols; ++c)
             {
-                SetTileVisuals(new Vector2Int(c, r), TileType.NEUTRAL);
+                Vector2Int coordinates = new Vector2Int(c, r);
+                SetTileVisuals(coordinates, TileType.NEUTRAL);
+
+                if (HasObstacleAtTile(coordinates))
+                {
+                    ++m_NumObstacles;
+                    SpawnObstacle(coordinates);
+                }
             }
         }
-
-        Vector2 centerPos = transform.position;
-        m_LeftXPos = centerPos.x - (float)(m_NumCols / 2) * m_TileLength;
-        m_BottomYPos = centerPos.y - (float)(m_NumRows / 2) * m_TileLength;
     }
 
     #region Tile Status
@@ -127,20 +164,62 @@ public class GridManager : Singleton<GridManager>
             _ => null
         };
     }
-
     private void SetTileVisuals(Vector2Int tileCoordinates, TileType tileType)
     {
         // update visuals
-        m_Tilemap.SetTile(ConvertToTilemapCoordinates(tileCoordinates), GetTile(tileType));
+        m_FloorTilemap.SetTile(ConvertToTilemapCoordinates(tileCoordinates), GetTile(tileType));
     }
     #endregion
 
     #region Position Helpers
     public Vector2 GetWorldPositionOfTile(int rowNum, int colNum)
     {
-        return new Vector2(m_LeftXPos + colNum * m_TileLength, m_BottomYPos + rowNum * m_TileLength);
+        return new Vector2(m_LeftSquareCenter + colNum * m_TileLength, m_BottomSquareCenter + rowNum * m_TileLength);
+    }
+
+    private Vector2 GetWorldPositionOfTile(Vector2Int tileCoordinates)
+    {
+        return GetWorldPositionOfTile(tileCoordinates.y, tileCoordinates.x);
     }
     #endregion
+
+    #region Obstacle
+    private void SpawnObstacle(Vector2Int tileCoordinates)
+    {
+        GameObject obstacleRep = Instantiate(m_ObstacleRep);
+        obstacleRep.transform.position = GetWorldPositionOfTile(tileCoordinates);
+        obstacleRep.transform.localScale = new Vector3(m_TileLength, m_TileLength, 1);
+        obstacleRep.transform.parent = m_ObstacleParent;
+    }
+
+    private bool HasObstacleAtTile(Vector2Int tileCoordinates)
+    {
+        return m_ObstacleTilemap.GetTile(ConvertToTilemapCoordinates(tileCoordinates)) != null;
+    }
+
+    private void ClearObstacles()
+    {
+        foreach (Transform obstacleRep in m_ObstacleParent)
+        {
+            Destroy(obstacleRep);
+        }
+    }
+    #endregion
+
+    #region Quota
+    public float GetCleanedPercentage => m_TileState.GetCleanedTiles(m_NumObstacles);
+    #endregion
+
+#if UNITY_EDITOR
+    #region Setup
+    public void SetupGrids()
+    {
+        transform.localScale = new Vector3(m_NumCols * m_TileLength, m_NumRows * m_TileLength, 1);
+        m_FloorGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
+        m_ObstacleGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
+    }
+    #endregion
+#endif
 }
 
 #if UNITY_EDITOR
@@ -162,8 +241,7 @@ public class GridManagerEditor : Editor
 
         if (GUILayout.Button("Adjust grid"))
         {
-            m_GridManager.transform.localScale = new Vector3(m_GridManager.NumCols * m_GridManager.TileLength, m_GridManager.NumRows * m_GridManager.TileLength, 1);
-            m_GridManager.Grid.cellSize = new Vector3(m_GridManager.TileLength, m_GridManager.TileLength, 0);
+            m_GridManager.SetupGrids();
         }
     }
 }
