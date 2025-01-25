@@ -14,13 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Data>k__BackingField:
   - <Id>k__BackingField: 0
-    <Attack>k__BackingField: 1
+    <Attack>k__BackingField: 4
     <Hp>k__BackingField: 30
-    <AttackSpeed>k__BackingField: 3
-    <MovementSpeed>k__BackingField: 5
+    <AttackSpeed>k__BackingField: 0.2
+    <MovementSpeed>k__BackingField: 3
     <AtkType>k__BackingField: 1
-    <Speed>k__BackingField: 10
+    <Speed>k__BackingField: 6
     <Target>k__BackingField: 5
-    <Duration>k__BackingField: 5
+    <Duration>k__BackingField: 3
+    <Param1>k__BackingField: 0
+    <Param2>k__BackingField: 2
+  - <Id>k__BackingField: 1
+    <Attack>k__BackingField: 6
+    <Hp>k__BackingField: 30
+    <AttackSpeed>k__BackingField: 0.2
+    <MovementSpeed>k__BackingField: 5
+    <AtkType>k__BackingField: 0
+    <Speed>k__BackingField: 10
+    <Target>k__BackingField: 0
+    <Duration>k__BackingField: 2
     <Param1>k__BackingField: 1
     <Param2>k__BackingField: 0

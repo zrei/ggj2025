@@ -280,6 +280,7 @@ MonoBehaviour:
   <DamageTextPrefab>k__BackingField: {fileID: 2778187166958773830, guid: df197b237cd13cd4d8a7a3cd9c79658e, type: 3}
   <EnemySpawnIndicatorPrefab>k__BackingField: {fileID: 9147029254337856838, guid: 20cbe9f59f023db4e8ed66d958a88e3d, type: 3}
   <EnemyUnitPrefabs>k__BackingField:
+  - {fileID: 5241324883989192422, guid: c53501067ac112a42b3241a9f91f230d, type: 3}
   - {fileID: 1500966422669278794, guid: 8e22a296468f69645843e9c2c84c5c5d, type: 3}
 --- !u!1 &461595310
 GameObject:
