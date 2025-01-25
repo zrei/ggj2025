@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
 {
-
+    public void Despawn()
+    {
+        Destroy(gameObject);
+    }
 }

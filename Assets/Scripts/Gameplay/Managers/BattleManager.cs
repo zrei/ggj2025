@@ -34,18 +34,20 @@ public class BattleManager : Singleton<BattleManager>
             }
             else
             {
+                State = GameState.BetweenWaves;
+
                 // Kill all enemies and projectiles
                 var enemyUnits = GameObject.FindGameObjectsWithTag("Enemy");
                 foreach (var enemy in enemyUnits)
                 {
                     enemy.GetComponent<EnemyUnit>().Kill();
                 }
-
-                // TODO
                 var enemyProjectiles = GameObject.FindGameObjectsWithTag("EnemyProjectile");
+                foreach ( var enemyProjectile in enemyProjectiles)
+                {
+                    enemyProjectile.GetComponent<EnemyProjectile>().Despawn();
+                }
 
-                // TODO: Freeze / reset everything
-                State = GameState.BetweenWaves;
                 PlayerHudManager.Instance.DisplayEndWaveUI().Forget();
             }
         }
@@ -53,6 +55,8 @@ public class BattleManager : Singleton<BattleManager>
 
     public void NextWave()
     {
+        // TODO: Reset floors to neutral
+
         CurrentWave++;
         int timeForStage = DWave.GetDataById(CurrentWave).Value.WaveTime;
         StageTimer = timeForStage;
