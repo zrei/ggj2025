@@ -58,6 +58,32 @@ public class TileState
 
 public class GridManager : Singleton<GridManager>
 {
+    class PathNode
+    {
+        public PathNode m_PrevNode;
+        public Vector2Int m_Coordinates;
+
+        public PathNode(Vector2Int coordinates, PathNode pathNode = null)
+        {
+            m_PrevNode = pathNode;
+            m_Coordinates = coordinates;
+        }
+
+        public Stack<Vector2Int> GetTilesToMoveTo()
+        {
+            PathNode curr = this;
+            Stack<Vector2Int> tilesToMoveTo = new();
+
+            while (curr != null)
+            {
+                tilesToMoveTo.Push(curr.m_Coordinates);
+                curr = curr.m_PrevNode;
+            }
+
+            return tilesToMoveTo;
+        }
+    };
+
     [Header("Dimensions")]
     [SerializeField] private int m_NumRows = 10;
     [SerializeField] private int m_NumCols = 10;
@@ -230,10 +256,95 @@ public class GridManager : Singleton<GridManager>
     }
     #endregion
 #endif
-    private static List<Vector3> Pathfind(Vector2 initialWorldPosition, Vector2 finalWorldPosition)
+
+    #region Pathfinding
+    /*
+    public bool IsPositionValid(Vector3 worldPosition)
     {
+        Vector2Int tileCoordinates = CalculateTileCoordinates(worldPosition);
+        return IsCoordinatesValid(tileCoordinates) && !HasObstacleAtTile(tileCoordinates); 
+    }
+    */
+
+    public List<Vector2> GetRandomTileLocations(Vector2 currWorldPosition)
+    {
+        Vector2Int currPosition = CalculateTileCoordinates(currWorldPosition);
+        int randomCol = Random.Range(0, m_NumCols - 1);
+        int randomRow = Random.Range(0, m_NumRows - 1);
+        Vector2Int randomCoordinates = new Vector2Int(randomCol, randomRow);
+
+        while (randomCoordinates == currPosition || HasObstacleAtTile(randomCoordinates))
+        {
+            randomCol = Random.Range(0, m_NumCols - 1);
+            randomRow = Random.Range(0, m_NumRows - 1);
+            randomCoordinates = new Vector2Int(randomCol, randomRow);
+        }
+
+        return Pathfind(currPosition, randomCoordinates, false);
+    }
+
+    private bool IsCoordinatesValid(Vector2Int tileCoordinates)
+    {
+        return tileCoordinates.x >= 0 && tileCoordinates.x < m_NumCols && tileCoordinates.x >= 0 && tileCoordinates.y < m_NumRows;
+    }
+
+    public List<Vector2> Pathfind(Vector2 initialWorldPosition, Vector2 finalWorldPosition, bool removeFinalPosition = true)
+    {
+        Vector2Int initialTilePosition = CalculateTileCoordinates(initialWorldPosition);
+        Vector2Int finalTilePosition = CalculateTileCoordinates(finalWorldPosition);
+        return Pathfind(initialTilePosition, finalTilePosition, removeFinalPosition);
+    }
+
+    private List<Vector2> Pathfind(Vector2Int intiialTileCoordinates, Vector2Int finalTileCoordinates, bool removeFinalPosition = true)
+    {
+        Stack<Vector2Int> tilesToGoTo = BFS(intiialTileCoordinates, finalTileCoordinates);
+        List<Vector2> locationsToGoTo = new();
+        bool first = true;
+        while (tilesToGoTo.Count > 0)
+        {
+            Vector2Int tileCoordinates = tilesToGoTo.Pop();
+            if (first)
+            {
+                first = false;
+            }
+            else if (!removeFinalPosition || tilesToGoTo.Count > 0)
+            {
+                locationsToGoTo.Add(GetWorldPositionOfTile(tileCoordinates));
+            }
+        }
+        return locationsToGoTo;
+    }
+
+    private Stack<Vector2Int> BFS(Vector2Int initialTile, Vector2Int finalTile)
+    {
+        PathNode currTile = new(initialTile);
+        Queue<PathNode> queue = new();
+        queue.Enqueue(currTile);
+
+        while (queue.Count > 0)
+        {
+            PathNode curr = queue.Dequeue();
+
+            if (curr.m_Coordinates == finalTile)
+                return curr.GetTilesToMoveTo();
+
+            if (!IsCoordinatesValid(curr.m_Coordinates))
+                continue;
+
+            if (HasObstacleAtTile(curr.m_Coordinates))
+            {
+                continue;
+            }
+
+            queue.Enqueue(new PathNode(curr.m_Coordinates + Vector2Int.up, curr));
+            queue.Enqueue(new PathNode(curr.m_Coordinates + Vector2Int.down, curr));
+            queue.Enqueue(new PathNode(curr.m_Coordinates + Vector2Int.left, curr));
+            queue.Enqueue(new PathNode(curr.m_Coordinates + Vector2Int.right, curr));
+        }
+
         return new();
     }
+    #endregion
 }
 
 #if UNITY_EDITOR
