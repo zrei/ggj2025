@@ -51,6 +51,7 @@ public class BattleManager : Singleton<BattleManager>
             else
             {
                 State = GameState.BetweenWaves;
+                GlobalEvents.Waves.OnWaveEndEvent?.Invoke();
 
                 // Kill all enemies and projectiles
                 var enemyUnits = GameObject.FindGameObjectsWithTag("Enemy");
@@ -71,7 +72,7 @@ public class BattleManager : Singleton<BattleManager>
 
     public void NextWave()
     {
-        // TODO: Reset floors to neutral
+        GlobalEvents.Waves.OnWaveStartEvent?.Invoke();
 
         CurrentWave++;
         if (CurrentWave > DWave.GetAllData().Data.Count)

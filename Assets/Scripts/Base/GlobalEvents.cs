@@ -10,15 +10,26 @@ public static class GlobalEvents
 {
     public static class Player
     {
-        public static int PlayerMaxHealth = 100;
+        public static int PlayerMaxHealth = 10;
         public static float ReviveTime = 5f;
         public static float DirtyDotInterval = 2f;
         public static int DirtyDotDamage = 1;
+        public static float MinimumSpeedForDamage = 5f;
+        /// <summary>
+        /// Amount of damage dealt per 1 speed increase from minimum speed
+        /// </summary>
+        public static float DamageScale = 1f;
         public static VoidEvent OnPlayerStartSliding;
         public static VoidEvent OnPlayerStopSliding;
         public static VoidEvent OnPlayerShoot;
         public static VoidEvent OnPlayerMove;
         public static VoidEvent OnPlayerDeath;
         public static BoolEvent OnPlayerMoveOntoTile;
+    }
+
+    public static class Waves
+    {
+        public static VoidEvent OnWaveEndEvent;
+        public static VoidEvent OnWaveStartEvent;
     }
 }
