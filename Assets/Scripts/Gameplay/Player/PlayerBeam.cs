@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
+using UnityEngine.UI;
 
 public class PlayerBeam : Singleton<PlayerBeam>
 {
     public float SpeedMagnitude => m_Rigidbody.velocity.magnitude;
     public bool IsSliding => m_IsSliding;
 
-    [field: SerializeField]
+    [field: SerializeField, Header("Values")]
     private float BeamTime;
 
     [field: SerializeField]
@@ -25,6 +24,12 @@ public class PlayerBeam : Singleton<PlayerBeam>
 
     [field: SerializeField]
     private float DirtyDragAmount { get; set; }
+
+    [field: SerializeField, Header("UI")]
+    private Image CooldownBarImage { get; set; }
+
+    [field: SerializeField]
+    private GameObject ReadyFireOutline { get; set; }
 
     #region Tile State
     private TileType m_CurrTileType = TileType.NEUTRAL;
@@ -71,6 +76,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
     {
         GetPlayerInputs();
         UpdateAim();
+        UpdateCooldownBarUI();
 
         if (m_BeamCooldownTimer > 0)
         {
@@ -90,6 +96,30 @@ public class PlayerBeam : Singleton<PlayerBeam>
         }
     }
 
+    private void UpdateCooldownBarUI()
+    {
+        if (m_IsSliding)
+        {
+            var fraction = Mathf.Max(0f, m_BeamTimer / BeamTime);
+            CooldownBarImage.fillAmount = fraction;
+            ReadyFireOutline.SetActive(false);
+        }
+        else
+        {
+            var fraction = Mathf.Max(0f, (BeamCooldown - m_BeamCooldownTimer) / BeamCooldown);
+            CooldownBarImage.fillAmount = fraction;
+
+            if (CooldownBarImage.fillAmount >= 0.9999f)
+            {
+                ReadyFireOutline.SetActive(true);
+            }
+            else
+            {
+                ReadyFireOutline.SetActive(false);
+            }
+        }
+    }
+
     private void GetPlayerInputs()
     {
         CurrTileType = GridManager.Instance.GetTileTypeAtWorldCoordinates(transform.position);
@@ -105,6 +135,11 @@ public class PlayerBeam : Singleton<PlayerBeam>
         }
 
         if (m_BeamCooldownTimer > 0)
+        {
+            return;
+        }
+
+        if (BattleManager.Instance.State == GameState.BetweenWaves)
         {
             return;
         }

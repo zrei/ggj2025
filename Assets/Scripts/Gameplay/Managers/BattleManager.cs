@@ -1,6 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,6 +16,8 @@ public class BattleManager : Singleton<BattleManager>
     public int CurrentWave { get; private set; }
 
     public float StageTimer { get; private set; }
+
+    public WaveData WaveData { get; private set; }
 
     protected override void HandleAwake()
     {
@@ -82,7 +82,8 @@ public class BattleManager : Singleton<BattleManager>
             return;
         }
 
-        int timeForStage = DWave.GetDataById(CurrentWave).Value.WaveTime;
+        WaveData = DWave.GetDataById(CurrentWave).Value;
+        int timeForStage = WaveData.WaveTime;
         StageTimer = timeForStage;
 
         SpawnManager.Instance.SpawnWave(CurrentWave);
