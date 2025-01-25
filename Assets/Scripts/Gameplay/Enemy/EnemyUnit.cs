@@ -109,7 +109,7 @@ public class EnemyUnit : MonoBehaviour, IDamagable
             {
                 float damage = (playerSpeed - GlobalEvents.Player.MinimumSpeedForDamage) * GlobalEvents.Player.DamageScale;
                 m_CurrDamageCooldown = m_DamageCooldown;
-                InternalDecHp(Mathf.FloorToInt(damage));
+                new DamageInfo(Mathf.CeilToInt(damage), DamageType.HealthDec, this).ProcessDamage();
             }
         }
     }
