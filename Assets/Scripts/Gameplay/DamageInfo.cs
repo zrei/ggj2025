@@ -9,12 +9,14 @@ public class DamageInfo
     private readonly int m_Damage;
     private readonly DamageType m_DamageType;
     private readonly IDamagable m_Target;
+    private readonly bool m_ShowDamageText;
 
-    public DamageInfo(int damage, DamageType damageType, IDamagable target)
+    public DamageInfo(int damage, DamageType damageType, IDamagable target, bool showDamageText = true)
     {
         m_Damage = damage;
         m_DamageType = damageType;
         m_Target = target;
+        m_ShowDamageText = showDamageText;
     }
 
     public void ProcessDamage()
@@ -30,8 +32,12 @@ public class DamageInfo
         }
         else if (m_DamageType == DamageType.HealthDec)
         {
-            var damageText = SpawnManager.Instance.SpawnDamageText(m_Target.UnitTransform.position);
-            damageText.Setup(m_Damage);
+            if (m_ShowDamageText)
+            {
+                var damageText = SpawnManager.Instance.SpawnDamageText(m_Target.UnitTransform.position);
+                damageText.Setup(m_Damage);
+            }
+
             m_Target.InternalDecHp(m_Damage);
         }
     }
