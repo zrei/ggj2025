@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
+using System;
 public enum TileType
 {
     CLEAN,
@@ -258,6 +259,40 @@ public class GridManager : Singleton<GridManager>
 #endif
 
     #region Pathfinding
+    private static TileType[] GetFilteredTileTypes(TargetType targetType)
+    {
+        return targetType switch
+        {
+            TargetType.Player => new TileType[] {},
+            TargetType.DirtyTile => new TileType[] {TileType.DIRTY},
+            TargetType.None => new TileType[] {},
+            TargetType.CleanTile => new TileType[] {TileType.CLEAN},
+            TargetType.NeutralTile => new TileType[] {TileType.NEUTRAL},
+            TargetType.NeutralOrCleanTile => new TileType[] {TileType.NEUTRAL, TileType.CLEAN},
+            _ => new TileType[] {}
+        };
+    }
+
+    private List<Vector2Int> GetAllowedTileTargets(HashSet<Vector2Int> excludedPositions, params TileType[] allowedTileTypes)
+    {
+        List<Vector2Int> allowedTileTargets = new();
+
+        for (int r = 0; r < m_NumRows; ++r)
+        {
+            for (int c = 0; c < m_NumCols; ++c)
+            {
+                Vector2Int coordinates = new Vector2Int(c, r);
+                if (HasObstacleAtTile(coordinates))
+                    continue;
+                if (Array.IndexOf(allowedTileTypes, m_TileState.GetTileTypeAtTile(coordinates)) < 0)
+                    continue;
+                if (excludedPositions.Contains(coordinates))
+                    continue;
+                allowedTileTargets.Add(coordinates);
+            }
+        }
+        return allowedTileTargets;
+    }
     /*
     public bool IsPositionValid(Vector3 worldPosition)
     {
@@ -266,23 +301,21 @@ public class GridManager : Singleton<GridManager>
     }
     */
 
-    public List<Vector2> GetRandomTileLocations(Vector2 currWorldPosition)
+    public List<Vector2> GetRandomTileLocations(Vector2 currWorldPosition, TargetType targetType, params Vector2[] excludedPositions)
     {
         Vector2Int currPosition = CalculateTileCoordinates(currWorldPosition);
-        int randomCol = Random.Range(0, m_NumCols - 1);
-        int randomRow = Random.Range(0, m_NumRows - 1);
-        Vector2Int randomCoordinates = new Vector2Int(randomCol, randomRow);
-        
-        int i = 0;
-        while ((randomCoordinates == currPosition || HasObstacleAtTile(randomCoordinates)) && i < 50)
+        HashSet<Vector2Int> excludedPositionsSet = new();
+        foreach (Vector2 excludedPos in excludedPositions)
         {
-            randomCol = Random.Range(0, m_NumCols - 1);
-            randomRow = Random.Range(0, m_NumRows - 1);
-            randomCoordinates = new Vector2Int(randomCol, randomRow);
-            ++i;
+            excludedPositionsSet.Add(CalculateTileCoordinates(excludedPos));
         }
+        excludedPositionsSet.Add(currPosition);
+        List<Vector2Int> allowedCorodinates = GetAllowedTileTargets(excludedPositionsSet, GetFilteredTileTypes(targetType));
 
-        return Pathfind(currPosition, randomCoordinates, false);
+        Vector2Int randomTargetLocation = allowedCorodinates[UnityEngine.Random.Range(0, allowedCorodinates.Count - 1)];
+ 
+
+        return Pathfind(currPosition, randomTargetLocation, false);
     }
 
     private bool IsCoordinatesValid(Vector2Int tileCoordinates)

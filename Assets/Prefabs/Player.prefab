@@ -202,17 +202,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4517218858367069228}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cf333d6bab4e854c869ece541d9cad6, type: 3}
+  m_Script: {fileID: 11500000, guid: f0b4b73622de96b4db660750fbf68903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <DirtyMovementSpeed>k__BackingField: 3
-  <NeutralMovementSpeed>k__BackingField: 4
-  <CleanMovementSpeed>k__BackingField: 10
-  m_InitialSlideForce: 500
-  <CleanDragAmount>k__BackingField: 0.2
-  <NeutralDragAmount>k__BackingField: 0.4
-  <DirtyDragAmount>k__BackingField: 0.8
-  m_StopDragThreshold: 4
 --- !u!114 &6068609251305248563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,7 +214,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4517218858367069228}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd19e3436aa33b0498f308b07e384568, type: 3}
+  m_Script: {fileID: 11500000, guid: 5287633b5fd5ecb4481cea428a521ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3905510604897532066
@@ -234,6 +226,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4517218858367069228}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62690c7970c4c074b9508198c41f6740, type: 3}
+  m_Script: {fileID: 11500000, guid: 07bcb1853cd35aa46bd9cdde34e7cfc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <DirtyMovementSpeed>k__BackingField: 3
+  <NeutralMovementSpeed>k__BackingField: 4
+  <CleanMovementSpeed>k__BackingField: 10
+  m_InitialSlideForce: 500
+  <CleanDragAmount>k__BackingField: 0.2
+  <NeutralDragAmount>k__BackingField: 0.4
+  <DirtyDragAmount>k__BackingField: 0.8
+  m_StopDragThreshold: 4

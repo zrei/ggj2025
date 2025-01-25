@@ -65,7 +65,7 @@ public class EnemyMoveBehaviour : EnemyBehaviour
 
     private void CalculateNewLocation(Vector2 currPosition)
     {
-        m_MoveLocations = GridManager.Instance.GetRandomTileLocations(currPosition);
+        m_MoveLocations = GridManager.Instance.GetRandomTileLocations(currPosition, m_AdditionalData.m_TileTargetType, Player.Instance.UnitTransform.position);
         m_MoveLocationIndex = 0;
     }
 
