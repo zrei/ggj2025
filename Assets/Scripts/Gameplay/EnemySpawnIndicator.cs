@@ -9,5 +9,7 @@ public class EnemySpawnIndicator : MonoBehaviour
         if (!this) return;
 
         SpawnManager.Instance.SpawnEnemyUnit(enemyId, transform.position);
+
+        Destroy(gameObject);
     }
 }
