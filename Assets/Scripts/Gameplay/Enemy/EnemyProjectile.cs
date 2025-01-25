@@ -11,6 +11,9 @@ public class EnemyProjectile : MonoBehaviour
 
     private bool m_IsUsed;
 
+    private Vector2 m_PreviousPosition;
+    private bool m_HasPreviousPosition;
+
     private void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody2D>();
@@ -30,9 +33,13 @@ public class EnemyProjectile : MonoBehaviour
     {
         if (!m_IsUsed)
         {
+            if (m_HasPreviousPosition)
+                GridManager.Instance.SetTileStatus(m_Rigidbody.position, TileType.DIRTY);
             m_Rigidbody.velocity = m_Direction * m_Speed;
+
+            m_PreviousPosition = m_Rigidbody.position;
+            m_HasPreviousPosition = true;
         }
-        // TODO: Dirty all that it touches
     }
 
     private void OnTriggerEnter2D(Collider2D other)

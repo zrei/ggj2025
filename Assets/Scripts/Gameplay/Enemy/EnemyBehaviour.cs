@@ -31,6 +31,8 @@ public class EnemyMoveBehaviour : EnemyBehaviour
 
     private List<Vector2> m_MoveLocations;
     private int m_MoveLocationIndex;
+    private Vector2 m_PreviousLocation;
+    private bool m_HasPreviousLocation = false;
 
     public override void Setup(EnemyUnit enemyUnit, Rigidbody2D rigidbody, float speed, int param1, params object[] additionalArguments)
     {
@@ -41,11 +43,17 @@ public class EnemyMoveBehaviour : EnemyBehaviour
 
     public override void Enter()
     {
+        m_HasPreviousLocation = false;
         CalculateNewLocation(m_Rb.position);
     }
 
     public override void Run(float deltaTime)
     {
+        if (m_HasPreviousLocation)
+        {
+            GridManager.Instance.SetTileStatus(m_PreviousLocation, TileType.DIRTY);
+        }
+
         if (m_MoveLocations.Count == 0)
         {
             CalculateNewLocation(m_Rb.position);
@@ -61,6 +69,9 @@ public class EnemyMoveBehaviour : EnemyBehaviour
             if (m_MoveLocationIndex >= m_MoveLocations.Count)
                 CalculateNewLocation(m_Rb.position);
         }
+
+        m_PreviousLocation = m_Rb.position;
+        m_HasPreviousLocation = true;
     }
 
     private void CalculateNewLocation(Vector2 currPosition)
@@ -120,6 +131,6 @@ public class EnemyThrowBehaviour : EnemyBehaviour
 
     public override void Exit()
     {
-
+        // pass
     }
 }
