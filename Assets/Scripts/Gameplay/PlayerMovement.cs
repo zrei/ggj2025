@@ -126,7 +126,10 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (!m_IsSliding)
+        {
             m_Rigidbody.velocity = m_MovementVector.normalized * GetMovementSpeed();
+            GlobalEvents.Player.OnPlayerMove?.Invoke();
+        }
     }
 
     private float GetMovementSpeed()

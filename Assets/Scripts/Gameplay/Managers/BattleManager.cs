@@ -13,7 +13,7 @@ public enum GameState
 
 public class BattleManager : Singleton<BattleManager>
 {
-    public GameState State { get; private set; }
+    public GameState State { get; set; }
 
     public int CurrentWave { get; private set; }
 

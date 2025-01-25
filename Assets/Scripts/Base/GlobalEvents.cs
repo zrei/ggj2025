@@ -13,5 +13,6 @@ public static class GlobalEvents
         public static VoidEvent OnPlayerStartSliding;
         public static VoidEvent OnPlayerStopSliding;
         public static VoidEvent OnPlayerShoot;
+        public static VoidEvent OnPlayerMove;
     }
 }
