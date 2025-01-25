@@ -24,12 +24,19 @@ public class BattleManager : Singleton<BattleManager>
         CurrentWave = 0;
         StageTimer = 0f;
 
-        StartCoroutine(BeginGame());
+        BeginGame();
     }
 
-    private IEnumerator BeginGame()
+    private async void BeginGame()
     {
-        yield return new WaitForSeconds(1);
+        if (!SceneManager.GetActiveScene().name.Equals("Gameplay"))
+        {
+            return;
+        }
+
+        await UniTask.WaitForSeconds(1f);
+        if (!this) return;
+
         NextWave();
     }
 
