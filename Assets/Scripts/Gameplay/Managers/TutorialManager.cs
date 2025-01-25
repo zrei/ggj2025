@@ -1,3 +1,4 @@
+using Cinemachine;
 using Cysharp.Threading.Tasks;
 using RedBlueGames.Tools.TextTyper;
 using System.Collections;
@@ -22,6 +23,9 @@ public class TutorialManager : Singleton<TutorialManager>
 
     [field: SerializeField]
     private TextTyper TutorialTextTyper { get; set; }
+
+    [field: SerializeField, Header("Cameras")]
+    private List<CinemachineVirtualCamera> RoomCameras { get; set; }
 
     [field: SerializeField, Header("Move"), TextArea(2, 3)]
     private string WelcomeString { get; set; }
@@ -57,6 +61,7 @@ public class TutorialManager : Singleton<TutorialManager>
     private string ReadyToGoText { get; set; }
 
     private int m_CurrentTutorialStep;
+    private int m_CurrentCamera = 0;
 
     protected override void HandleAwake()
     {
@@ -88,7 +93,7 @@ public class TutorialManager : Singleton<TutorialManager>
         }
         else if (m_CurrentTutorialStep == 2)
         {
-
+            SwitchCamera(1);
         }
         else if (m_CurrentTutorialStep == 3)
         {
@@ -112,5 +117,16 @@ public class TutorialManager : Singleton<TutorialManager>
         // Make sure to set sentence to string.Empty first!
         TutorialText.text = string.Empty;
         TutorialTextTyper.TypeText(sentence, 0.01f);
+    }
+
+    private void SwitchCamera(int i)
+    {
+        if (i == m_CurrentCamera)
+        {
+            return;
+        }
+
+        RoomCameras[i].Priority = 10;
+        RoomCameras[m_CurrentCamera].Priority = 0;
     }
 }
