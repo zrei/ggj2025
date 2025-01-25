@@ -18,12 +18,27 @@ public class Player : Singleton<Player>, IDamagable
     private float m_CurrDirtyDotTimer;
     #endregion
 
+    #region Visuals
+
+    #endregion
+
     protected override void HandleAwake()
     {
+        base.HandleAwake();
+
         m_MaxHealth = GlobalEvents.Player.PlayerMaxHealth;
         m_CurrentHealth = GlobalEvents.Player.PlayerMaxHealth;
 
         IsDead = false;
+
+        GlobalEvents.Player.OnPlayerMoveOntoTile += ToggleStandingOnDirty;
+    }
+
+    protected override void HandleDestroy()
+    {
+        base.HandleDestroy();
+
+        GlobalEvents.Player.OnPlayerMoveOntoTile -= ToggleStandingOnDirty;
     }
 
     public void ResetPlayer()
@@ -92,7 +107,7 @@ public class Player : Singleton<Player>, IDamagable
         }
     }
 
-    public void ToggleStandingOnDirty(bool isOnDirty)
+    private void ToggleStandingOnDirty(bool isOnDirty)
     {
         if (!isOnDirty)
         {

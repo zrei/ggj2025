@@ -3,6 +3,7 @@ using UnityEngine;
 public delegate void IntEvent(int _);
 public delegate void VoidEvent();
 public delegate void FloatEvent(float _);
+public delegate void BoolEvent(bool _);
 public delegate void Vector3Event(Vector3 _);
 
 public static class GlobalEvents 
@@ -18,5 +19,6 @@ public static class GlobalEvents
         public static VoidEvent OnPlayerShoot;
         public static VoidEvent OnPlayerMove;
         public static VoidEvent OnPlayerDeath;
+        public static BoolEvent OnPlayerMoveOntoTile;
     }
 }
