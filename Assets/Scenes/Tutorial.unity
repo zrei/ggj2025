@@ -4822,7 +4822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3576012953929359923}
   - component: {fileID: 8949653510194053}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4904,7 +4904,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4550189821980071002}
   - component: {fileID: 4498856889743392530}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: InternalObstacles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4942,7 +4942,7 @@ GameObject:
   - component: {fileID: 649925895071403947}
   - component: {fileID: 2039674135529434814}
   - component: {fileID: 7547589232181023718}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5079,7 +5079,7 @@ GameObject:
   - component: {fileID: 5522007670532558460}
   - component: {fileID: 3381679417997169666}
   - component: {fileID: 4733427641506566879}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

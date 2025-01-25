@@ -48,10 +48,16 @@ public class EnemyProjectile : MonoBehaviour
             return;
         }
 
+        if (other.gameObject.layer == LayerMask.NameToLayer("Obstacles"))
+        {
+            m_IsUsed = true;
+            Despawn();
+        }
         if (other.gameObject.CompareTag("Player"))
         {
             new DamageInfo(m_Attack, DamageType.HealthDec, Player.Instance).ProcessDamage();
             m_IsUsed = true;
+            Despawn();
         }
     }
 
