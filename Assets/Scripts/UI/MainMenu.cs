@@ -30,7 +30,7 @@ public class MainMenu : MonoBehaviour
 
     private void OnPlayButtonClick()
     {
-        SceneManager.LoadScene("Gameplay");
+        SceneManager.LoadScene("Tutorial");
     }
 
     private void OnHelpButtonClick()
