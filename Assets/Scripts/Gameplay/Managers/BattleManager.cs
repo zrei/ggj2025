@@ -71,7 +71,7 @@ public class BattleManager : Singleton<BattleManager>
 
     public void NextWave()
     {
-        // TODO: Reset floors to neutral
+        GridManager.Instance.ResetTilesToNeutral();
 
         CurrentWave++;
         if (CurrentWave > DWave.GetAllData().Data.Count)

@@ -58,7 +58,7 @@ public class EnemyUnit : MonoBehaviour, IDamagable
         }
 
         m_CurrentHealth -= value;
-        if (m_CurrentHealth < 0)
+        if (m_CurrentHealth <= 0)
         {
             IsDead = true;
             OnDeath().Forget();

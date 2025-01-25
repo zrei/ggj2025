@@ -165,6 +165,19 @@ public class GridManager : Singleton<GridManager>
         // update visuals
         SetTileVisuals(tileCoordinates, tileType);
     }
+
+    public void ResetTilesToNeutral()
+    {
+        for (int r = 0; r < m_NumRows; ++r)
+        {
+            for (int c = 0; c < m_NumCols; ++c)
+            {
+                Vector2Int coordinates = new Vector2Int(c, r);
+                m_TileState.SetTileTypeAtTile(coordinates, TileType.NEUTRAL);
+                SetTileVisuals(coordinates, TileType.NEUTRAL);
+            }
+        }
+    }
     #endregion
 
     #region Coordinate Helpers
