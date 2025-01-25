@@ -136,8 +136,8 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     private void OnTryAgainButtonClick()
     {
-        // TODO
-
+        LoseGameDisplayParent.SetActive(false);
+        BattleManager.Instance.NextWave(false);
     }
 
     private void OnMainMenuButtonClick()
