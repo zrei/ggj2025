@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
     {
         CurrTileType = TileType.NEUTRAL;
         m_Rigidbody = GetComponent<Rigidbody2D>();
-        m_SpriteRenderer = GetComponent<SpriteRenderer>();
+        m_SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
         m_StopDragThresholdSquared = m_StopDragThreshold * m_StopDragThreshold;
     }
@@ -113,21 +113,23 @@ public class PlayerMovement : MonoBehaviour
     {
         float x = m_Rigidbody.velocity.x;
 
-        // TODO: Change depending on the movement of sprite
         if (x > 0)
         {
-
+            m_SpriteRenderer.flipX = true;
         }
         else if (x < 0)
         {
-
+            m_SpriteRenderer.flipX = false;
         }
     }
 
     private void FixedUpdate()
     {
         if (!m_IsSliding)
+        {
             m_Rigidbody.velocity = m_MovementVector.normalized * GetMovementSpeed();
+            GlobalEvents.Player.OnPlayerMove?.Invoke();
+        }
     }
 
     private float GetMovementSpeed()

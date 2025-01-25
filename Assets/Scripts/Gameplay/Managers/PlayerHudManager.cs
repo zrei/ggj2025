@@ -13,10 +13,10 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     private GameObject StageTimerParent {  get; set; }
 
     [field: SerializeField]
-    private TextMeshProUGUI StageTimerText { get; set; }
+    public TextMeshProUGUI StageTimerText { get; set; }
 
     [field: SerializeField, Header("Clean Threshold")]
-    private TextMeshProUGUI CleanThresholdText { get; set; }
+    public TextMeshProUGUI CleanThresholdText { get; set; }
 
     [field: SerializeField, Header("Wave Start Display")]
     private Animator WaveStartAnimator { get; set; }
@@ -62,8 +62,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         if (BattleManager.Instance.State == GameState.InGame)
         {
             StageTimerText.text = ConvertTimerToDisplay(BattleManager.Instance.StageTimer);
-            // TODO
-            // CleanThresholdText.text = $"{}%"
+            CleanThresholdText.text = $"{Mathf.CeilToInt(GridManager.Instance.GetCleanedPercentage)}%";
         }
     }
 
