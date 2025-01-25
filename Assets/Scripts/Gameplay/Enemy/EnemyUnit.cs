@@ -90,7 +90,6 @@ public class EnemyUnit : MonoBehaviour, IDamagable
             if (m_CurrDamageCooldown > 0)
                 return;
 
-            // TODO: Replace with exposed player velocity
             float playerSpeed = PlayerBeam.Instance.SpeedMagnitude;
             if (playerSpeed > GlobalEvents.Player.MinimumSpeedForDamage)
             {
