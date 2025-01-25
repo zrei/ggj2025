@@ -198,20 +198,11 @@ public class GridManager : Singleton<GridManager>
     #region Setup
     public void SetupGrids()
     {
-        m_FloorGrid.transform.parent = null;
-        m_ObstacleGrid.transform.parent = null;
-        m_WallGrid.transform.parent = null;
-        
-        transform.localScale = new Vector3(m_NumCols * m_TileLength, m_NumRows * m_TileLength, 1);
         m_FloorGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
         m_ObstacleGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
         m_WallGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
 
         SetupWalls();
-        
-        m_FloorGrid.transform.parent = transform;
-        m_ObstacleGrid.transform.parent = transform;
-        m_WallGrid.transform.parent = transform;
     }
 
     private void SetupWalls()
