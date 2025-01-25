@@ -12,14 +12,33 @@ public class Player : Singleton<Player>, IDamagable
 
     public static IntEvent OnPlayerHealthValueChanged;
 
+    #region Timer
     private float m_ReviveCountdownTimer;
+    private bool m_IsOnDirty = false;
+    private float m_CurrDirtyDotTimer;
+    #endregion
+
+    #region Visuals
+
+    #endregion
 
     protected override void HandleAwake()
     {
+        base.HandleAwake();
+
         m_MaxHealth = GlobalEvents.Player.PlayerMaxHealth;
         m_CurrentHealth = GlobalEvents.Player.PlayerMaxHealth;
 
         IsDead = false;
+
+        GlobalEvents.Player.OnPlayerMoveOntoTile += ToggleStandingOnDirty;
+    }
+
+    protected override void HandleDestroy()
+    {
+        base.HandleDestroy();
+
+        GlobalEvents.Player.OnPlayerMoveOntoTile -= ToggleStandingOnDirty;
     }
 
     public void ResetPlayer()
@@ -75,8 +94,25 @@ public class Player : Singleton<Player>, IDamagable
             {
                 IsDead = false;
                 InternalIncHp(m_MaxHealth);
-            }
-                
+            }       
         }
+        else if (m_IsOnDirty)
+        {
+            m_CurrDirtyDotTimer += Time.deltaTime;
+            if (m_CurrDirtyDotTimer >= GlobalEvents.Player.DirtyDotInterval)
+            {
+                InternalDecHp(GlobalEvents.Player.DirtyDotDamage);
+                m_CurrDirtyDotTimer = m_CurrDirtyDotTimer % GlobalEvents.Player.DirtyDotInterval;
+            }
+        }
+    }
+
+    private void ToggleStandingOnDirty(bool isOnDirty)
+    {
+        if (!isOnDirty)
+        {
+            m_CurrDirtyDotTimer = 0f;
+        }
+        m_IsOnDirty = isOnDirty;
     }
 }

@@ -40,6 +40,12 @@ public class PlayerMovement : MonoBehaviour
                 if (m_IsSliding)
                     m_Rigidbody.drag = GetDrag();
             }
+
+            if (!m_IsSliding)
+            {
+                GlobalEvents.Player.OnPlayerMoveOntoTile?.Invoke(value == TileType.DIRTY);
+            }
+
             m_CurrTileType = value;
         }
     }
@@ -103,6 +109,7 @@ public class PlayerMovement : MonoBehaviour
             m_Rigidbody.drag = GetDrag();
             m_Rigidbody.AddForce(m_CurrSlideDirection.normalized * m_InitialSlideForce);
             m_IsSliding = true;
+            GlobalEvents.Player.OnPlayerMoveOntoTile?.Invoke(false);
             GlobalEvents.Player.OnPlayerStartSliding?.Invoke();
         }
         else if (m_IsSliding && m_Rigidbody.velocity.sqrMagnitude < m_PreviousVelocity.sqrMagnitude && m_Rigidbody.velocity.sqrMagnitude < m_StopDragThresholdSquared)
