@@ -19,6 +19,8 @@ public class BattleManager : Singleton<BattleManager>
 
     public WaveData WaveData { get; private set; }
 
+    public bool HasNextWave => CurrentWave < DWave.GetAllData().Data.Count;
+
     protected override void HandleAwake()
     {
         CurrentWave = 0;
@@ -98,7 +100,7 @@ public class BattleManager : Singleton<BattleManager>
         return Mathf.CeilToInt(GridManager.Instance.GetCleanedPercentage) >= DWave.GetDataById(CurrentWave).Value.CleanThreshold;
     }
 
-    private void FinishGame()
+    public void FinishGame()
     {
         SceneManager.LoadScene("EndGame");
     }

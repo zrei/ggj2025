@@ -81,6 +81,12 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     private async UniTask DisplayStartWaveUI(bool incrementWave = true)
     {
         // TODO: Show "Get Ready" text
+        if (!BattleManager.Instance.HasNextWave)
+        {
+            await UniTask.WaitForSeconds(3f);
+            BattleManager.Instance.FinishGame();
+            return;
+        }
 
         // We get the time for the stage first to display
         
