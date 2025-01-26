@@ -298,7 +298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BeamTime: 10
-  <SlideForce>k__BackingField: 10
+  <SlideForce>k__BackingField: 500
   <CleanDragAmount>k__BackingField: 0.2
   <NeutralDragAmount>k__BackingField: 0.4
   <DirtyDragAmount>k__BackingField: 0.8

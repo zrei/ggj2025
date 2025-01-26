@@ -144,8 +144,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
             }
             else
             {
-                var slideMult = CurrTileType == TileType.CLEAN ? 3f : 1f;
-                m_Rigidbody.AddForce(CurrentSlideDirection * SlideForce * slideMult);
+                m_Rigidbody.AddForce(SlideForce * CurrentSlideDirection * Time.deltaTime);
                 m_Rigidbody.drag = GetDrag();
                 if (m_IsSliding)
                 {
