@@ -20,6 +20,8 @@ public class EnemyProjectile : MonoBehaviour
     /*
      * Called by enemy behaviour
      */
+
+    // need to pass enemy location and... range 
     public void Setup(Vector2 direction, int attack, float speed)
     {
         m_Direction = direction;
@@ -65,4 +67,6 @@ public class EnemyProjectile : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    protected virtual void Activate() { }
 }

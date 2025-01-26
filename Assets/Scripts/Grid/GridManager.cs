@@ -189,6 +189,22 @@ public class GridManager : Singleton<GridManager>
             }
         }
     }
+
+    public void ExplodeAOEBullet(Vector2 bulletPosition, int radius)
+    {
+        Vector2Int tileCoordinates = CalculateTileCoordinates(bulletPosition);
+        for (int r = -radius; r <= radius; ++r)
+        {
+            for (int c = -radius; c <= radius; ++c)
+            {
+                Vector2Int newCoordinates = tileCoordinates + new Vector2Int(r, c);
+                if (IsCoordinatesValid(newCoordinates))
+                {
+                    SetTileStatus(newCoordinates, TileType.DIRTY);
+                }
+            }
+        }
+    }
     #endregion
 
     #region Coordinate Helpers
