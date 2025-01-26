@@ -46,5 +46,5 @@ MonoBehaviour:
     <CleanThreshold>k__BackingField: 35
     <ProjectileSpeedMult>k__BackingField: 1
     <MovementSpeedMultiplier>k__BackingField: 1.5
-    <HpMultiplier>k__BackingField: 2
+    <HpMultiplier>k__BackingField: 1.5
     <AttackMultiplier>k__BackingField: 1
