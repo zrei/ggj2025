@@ -17,8 +17,9 @@ public class DamageText : MonoBehaviour
         m_Timer = TimeTillDisappear;
     }
 
-    public void Setup(int value)
+    public void Setup(int value, Vector2 pos)
     {
+        transform.position = pos;
         DamageValueText.text = value.ToString();
         m_IsSetUp = true;
     }

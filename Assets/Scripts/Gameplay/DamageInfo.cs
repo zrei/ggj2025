@@ -35,7 +35,7 @@ public class DamageInfo
             if (m_ShowDamageText)
             {
                 var damageText = SpawnManager.Instance.SpawnDamageText(m_Target.UnitTransform.position);
-                damageText.Setup(m_Damage);
+                damageText.Setup(m_Damage, m_Target.UnitTransform.position);
             }
 
             m_Target.InternalDecHp(m_Damage);

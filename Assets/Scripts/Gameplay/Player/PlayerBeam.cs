@@ -198,7 +198,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
 
     private void DisplayBubbleParticles()
     {
-        if (m_IsSliding && CommonUtil.JudgeExe(80))
+        if (m_IsSliding && CommonUtil.JudgeExe(50))
         {
             var offset = Random.insideUnitCircle * 0.2f;
             Instantiate(BubbleParticles[Random.Range(0, m_BubbleListLength)], (Vector2)ShootTransform.position + offset, Quaternion.identity);
