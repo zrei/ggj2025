@@ -48,7 +48,6 @@ public class PlayerBeam : Singleton<PlayerBeam>
         {
             if (m_CurrTileType != value)
             {
-                // TODO: do whatever you need on tile type change
                 if (m_IsSliding)
                     m_Rigidbody.drag = GetDrag();
             }
@@ -96,7 +95,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
         }
         else
         {
-            m_BeamTimer = Mathf.Min(m_BeamTimer + Time.deltaTime * 5, BeamTime);
+            m_BeamTimer = Mathf.Min(m_BeamTimer + Time.deltaTime * 10f, BeamTime);
         }
     }
 
@@ -175,14 +174,13 @@ public class PlayerBeam : Singleton<PlayerBeam>
     private void ExitSlide()
     {
         m_IsSliding = false;
-        m_Rigidbody.velocity = Vector2.zero;
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
         GlobalEvents.Player.OnPlayerStopSliding?.Invoke();
     }
 
     private void DisplayBubbleParticles()
     {
-        if (m_IsSliding)
+        if (m_IsSliding && CommonUtil.JudgeExe(80))
         {
             var offset = Random.insideUnitCircle * 0.2f;
             Instantiate(BubbleParticles[Random.Range(0, m_BubbleListLength)], (Vector2)ShootTransform.position + offset, Quaternion.identity);

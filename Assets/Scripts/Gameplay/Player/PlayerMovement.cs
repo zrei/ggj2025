@@ -89,6 +89,11 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        if (CurrTileType == TileType.CLEAN)
+        {
+            m_Rigidbody.AddForce(m_MovementVector * 5f, ForceMode2D.Force);
+        }
+
         if (!PlayerBeam.Instance.IsSliding)
         {
             m_Rigidbody.velocity = m_MovementVector.normalized * GetMovementSpeed();
