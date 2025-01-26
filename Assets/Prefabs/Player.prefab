@@ -318,7 +318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <DirtyMovementSpeed>k__BackingField: 3
   <NeutralMovementSpeed>k__BackingField: 4
-  <CleanMovementSpeed>k__BackingField: 10
+  <CleanMovementSpeed>k__BackingField: 8
 --- !u!1 &6817132022592959574
 GameObject:
   m_ObjectHideFlags: 0

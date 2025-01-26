@@ -1383,8 +1383,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71027d3da57862b4eaaee0944d1bf880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NumRows: 12
-  m_NumCols: 24
+  m_NumRows: 26
+  m_NumCols: 36
   m_TileLength: 0.64
   m_FloorGrid: {fileID: 4677917489247210225}
   m_FloorTilemap: {fileID: 7821982231551965560}
