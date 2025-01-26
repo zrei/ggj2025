@@ -78,7 +78,6 @@ public class BattleManager : Singleton<BattleManager>
 
         if (increaseWave)
             CurrentWave++;
-        Debug.Log(CurrentWave);
         if (CurrentWave > DWave.GetAllData().Data.Count)
         {
             FinishGame();

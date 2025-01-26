@@ -59,13 +59,26 @@ public class PlayerMovement : MonoBehaviour
     {
         float x = m_Rigidbody.velocity.x;
 
-        if (x > 0)
-        {
-            m_SpriteRenderer.flipX = true;
-        }
-        else if (x < 0)
+        if (PlayerBeam.Instance.IsSliding)
         {
             m_SpriteRenderer.flipX = false;
+            var dir = PlayerBeam.Instance.CurrentSlideDirection;
+            float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            float finalAngle = targetAngle + 180f;
+            transform.rotation = Quaternion.Euler(0, 0, finalAngle);
+        }
+        else
+        {
+            transform.rotation = Quaternion.identity;
+
+            if (x > 0)
+            {
+                m_SpriteRenderer.flipX = true;
+            }
+            else if (x < 0)
+            {
+                m_SpriteRenderer.flipX = false;
+            }
         }
     }
 
