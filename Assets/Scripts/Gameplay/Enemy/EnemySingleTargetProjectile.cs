@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class EnemySingleTargetProjectile : EnemyProjectile
-{
-    // Start is called before the first frame update
-    void Start()
+public class EnemySingleTargetProjectile : EnemyProjectile {
+    protected override void Activate(IDamagable target = null)
     {
-        
-    }
+        if (target != null)
+        {
+            new DamageInfo(m_Attack, DamageType.HealthDec, target).ProcessDamage();
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        base.Activate(target);
     }
 }

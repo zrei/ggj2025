@@ -167,9 +167,14 @@ public class GridManager : Singleton<GridManager>
     {
         Vector2Int tileCoordinates = CalculateTileCoordinates(worldCoordinates);
 
+        SetTileStatus(tileCoordinates, tileType);
+    }
+
+    private void SetTileStatus(Vector2Int tileCoordinates, TileType tileType)
+    {
         if (m_TileState.GetTileTypeAtTile(tileCoordinates) == tileType)
             return;
-        
+
         // update state
         m_TileState.SetTileTypeAtTile(tileCoordinates, tileType);
 
@@ -306,17 +311,16 @@ public class GridManager : Singleton<GridManager>
 #endif
 
     #region Pathfinding
-    private static TileType[] GetFilteredTileTypes(TargetType? targetType)
+    private static TileType[] GetFilteredTileTypes(TargetType targetType)
     {
         return targetType switch
         {
             TargetType.Player => new TileType[] {},
             TargetType.DirtyTile => new TileType[] {TileType.DIRTY},
-            TargetType.None => new TileType[] {},
+            TargetType.None => new TileType[] {TileType.DIRTY, TileType.CLEAN, TileType.NEUTRAL},
             TargetType.CleanTile => new TileType[] {TileType.CLEAN},
             TargetType.NeutralTile => new TileType[] {TileType.NEUTRAL},
             TargetType.NeutralOrCleanTile => new TileType[] {TileType.NEUTRAL, TileType.CLEAN},
-            null => new TileType[] {TileType.CLEAN, TileType.NEUTRAL, TileType.DIRTY},
             _ => new TileType[] {}
         };
     }
@@ -348,10 +352,35 @@ public class GridManager : Singleton<GridManager>
         return IsCoordinatesValid(tileCoordinates) && !HasObstacleAtTile(tileCoordinates); 
     }
     
+    public Vector2 GetRandomTargetLocation(Vector2 currWorldPosition, TargetType targetType, params Vector2[] excludedPositions)
+    {
+        if (targetType == TargetType.Player)
+        {
+            return Player.Instance.UnitTransform.position;
+        }
 
-    public List<Vector2> GetRandomTileLocations(Vector2 currWorldPosition, TargetType? targetType, params Vector2[] excludedPositions)
+        Vector2Int currPosition = CalculateTileCoordinates(currWorldPosition);
+        HashSet<Vector2Int> excludedPositionsSet = new();
+        foreach (Vector2 excludedPos in excludedPositions)
+        {
+            excludedPositionsSet.Add(CalculateTileCoordinates(excludedPos));
+        }
+        excludedPositionsSet.Add(currPosition);
+        List<Vector2Int> allowedCorodinates = GetAllowedTileTargets(excludedPositionsSet, GetFilteredTileTypes(targetType));
+
+        Vector2Int randomTargetLocation = allowedCorodinates[UnityEngine.Random.Range(0, allowedCorodinates.Count)];
+        return GetWorldPositionOfTile(randomTargetLocation);
+    }
+
+    public List<Vector2> GetRandomTileLocations(Vector2 currWorldPosition, TargetType targetType, params Vector2[] excludedPositions)
     {
         Vector2Int currPosition = CalculateTileCoordinates(currWorldPosition);
+
+        if (targetType == TargetType.Player)
+        {
+            return Pathfind(currPosition, CalculateTileCoordinates(Player.Instance.UnitTransform.position), false);
+        }
+
         HashSet<Vector2Int> excludedPositionsSet = new();
         foreach (Vector2 excludedPos in excludedPositions)
         {

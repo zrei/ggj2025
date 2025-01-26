@@ -50,6 +50,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DamageCooldown: 1
   m_EnemyController: {fileID: 7548537181032278882}
+  m_DamagedFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  m_DamagedFlashInterval: 0.2
 --- !u!61 &2717136226092739997
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -135,8 +137,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ProjectileData:
-    m_EnemyProjectileToFire: {fileID: 4752021273597491082, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
+    m_EnemyProjectileToFire: {fileID: 4064549778345847377, guid: c81183f273763334a971c8fa6847297e, type: 3}
     m_RadiusFromCenterToSpawn: 1
+    m_AdditionalAOEInfo:
+      m_DirtyRadius: 1
+      m_DamageRadius: 1
 --- !u!1 &4856123770095806847
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,7 +216,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

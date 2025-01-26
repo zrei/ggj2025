@@ -69,9 +69,13 @@ PrefabInstance:
       value: Radish
       objectReference: {fileID: 0}
     - target: {fileID: 7548537181032278882, guid: a63e4ff7ed926164d9b303a2db396368, type: 3}
+      propertyPath: m_ProjectileData.m_AOERange
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7548537181032278882, guid: a63e4ff7ed926164d9b303a2db396368, type: 3}
       propertyPath: m_ProjectileData.m_EnemyProjectileToFire
       value: 
-      objectReference: {fileID: 7147841472722399870, guid: 18d8989d10497c54190e72f6666f023a, type: 3}
+      objectReference: {fileID: 5254483077708943660, guid: d1dc8c8629c4b24499852397d367eea5, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

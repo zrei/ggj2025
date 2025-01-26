@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
 {
-    private Rigidbody2D m_Rigidbody;
+    protected Rigidbody2D m_Rigidbody;
+    private Vector2 m_InitialPosition;
     private Vector2 m_Direction;
-    private int m_Attack;
+    private float m_DistanceFromOriginalPositionSquared;
+
+    protected int m_Attack;
     private float m_Speed;
 
     private bool m_IsUsed;
 
     private Vector2 m_PreviousPosition;
     private bool m_HasPreviousPosition;
+
+    private TargetType m_TargetType;
 
     private void Awake()
     {
@@ -20,10 +25,11 @@ public class EnemyProjectile : MonoBehaviour
     /*
      * Called by enemy behaviour
      */
-
-    // need to pass enemy location and... range 
-    public void Setup(Vector2 direction, int attack, float speed)
+    public virtual void Setup(Vector2 target, Vector2 direction, int attack, float speed, TargetType targetType, params object[] additionalArguments)
     {
+        m_InitialPosition = m_Rigidbody.position;
+        m_TargetType = targetType;
+        m_DistanceFromOriginalPositionSquared = (target - m_InitialPosition).sqrMagnitude;
         m_Direction = direction;
         m_Attack = attack;
         m_Speed = speed;
@@ -36,10 +42,16 @@ public class EnemyProjectile : MonoBehaviour
         {
             if (m_HasPreviousPosition && GridManager.Instance.IsPositionValid(m_Rigidbody.position))
                 GridManager.Instance.SetTileStatus(m_Rigidbody.position, TileType.DIRTY);
+
             m_Rigidbody.velocity = m_Direction * m_Speed;
 
             m_PreviousPosition = m_Rigidbody.position;
             m_HasPreviousPosition = true;
+
+            if (m_TargetType != TargetType.Player && (m_Rigidbody.position - m_InitialPosition).sqrMagnitude >= m_DistanceFromOriginalPositionSquared)
+            {
+                Activate(null);
+            }
         }
     }
 
@@ -52,14 +64,11 @@ public class EnemyProjectile : MonoBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Obstacles"))
         {
-            m_IsUsed = true;
-            Despawn();
+            Activate(null);
         }
-        if (other.gameObject.CompareTag("Player"))
+        else if (other.gameObject.CompareTag("Player"))
         {
-            new DamageInfo(m_Attack, DamageType.HealthDec, Player.Instance).ProcessDamage();
-            m_IsUsed = true;
-            Despawn();
+            Activate(Player.Instance);
         }
     }
 
@@ -68,5 +77,9 @@ public class EnemyProjectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    protected virtual void Activate() { }
+    protected virtual void Activate(IDamagable target = null) 
+    {
+        m_IsUsed = true;
+        Despawn();
+    }
 }

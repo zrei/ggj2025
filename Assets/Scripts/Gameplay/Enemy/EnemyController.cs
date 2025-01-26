@@ -33,7 +33,7 @@ public class EnemyController : MonoBehaviour
         if (!isHyper)
         {
             EnemyMoveBehaviour enemyMoveBehaviour = new EnemyMoveBehaviour();
-            enemyMoveBehaviour.Setup(enemyUnit, GetComponent<Rigidbody2D>(), enemyData.MovementSpeed, enemyData.Param1, new EnemyMoveBehaviour.AdditionalMoveBehaviourData() { m_TileTargetType = null });
+            enemyMoveBehaviour.Setup(enemyUnit, GetComponent<Rigidbody2D>(), enemyData.MovementSpeed, TargetType.None, enemyData.Param1, DamageTypeDealt.None);
             enemyControllerState = new EnemyControllerState() { m_EnemyBehaviour = enemyMoveBehaviour, m_TimeToLast = 1 / enemyData.AttackSpeed };
         }
         else
@@ -41,13 +41,13 @@ public class EnemyController : MonoBehaviour
             if (enemyData.AtkType == AttackType.Projectile)
             {
                 EnemyThrowBehaviour enemyThrowBehaviour = new EnemyThrowBehaviour();
-                enemyThrowBehaviour.Setup(enemyUnit, GetComponent<Rigidbody2D>(), enemyData.Speed, enemyData.Param1, m_ProjectileData);
+                enemyThrowBehaviour.Setup(enemyUnit, GetComponent<Rigidbody2D>(), enemyData.Speed, enemyData.Target, enemyData.Param1, enemyData.Param2, m_ProjectileData);
                 enemyControllerState = new EnemyControllerState() { m_EnemyBehaviour = enemyThrowBehaviour, m_TimeToLast = enemyData.Duration };
             }
             else
             {
                 EnemyMoveBehaviour enemyMoveBehaviour = new EnemyMoveBehaviour();
-                enemyMoveBehaviour.Setup(enemyUnit, GetComponent<Rigidbody2D>(), enemyData.Speed, enemyData.Param1, new EnemyMoveBehaviour.AdditionalMoveBehaviourData() { m_TileTargetType = enemyData.Target });
+                enemyMoveBehaviour.Setup(enemyUnit, GetComponent<Rigidbody2D>(), enemyData.Speed, enemyData.Target, enemyData.Param1, enemyData.Param2);
                 enemyControllerState = new EnemyControllerState() { m_EnemyBehaviour = enemyMoveBehaviour, m_TimeToLast = enemyData.Duration };
             }
         }
