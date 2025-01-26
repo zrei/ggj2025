@@ -47,8 +47,6 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     [field: SerializeField]
     private AudioClip SadAudioClip { get; set; }
 
-    private const string WAVE_CARD_FORMAT = "Wave {0}";
-
     protected override void HandleAwake()
     {
         Player.OnPlayerHealthValueChanged += OnPlayerHealthValueChanged;
@@ -96,7 +94,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         // We get the time for the stage first to display
         
         int nextWaveNumber = incrementWave ? BattleManager.Instance.CurrentWave + 1 : BattleManager.Instance.CurrentWave;
-        m_WaveText.text = string.Format(WAVE_CARD_FORMAT, nextWaveNumber);
+        m_WaveText.text = nextWaveNumber.ToString();
         int timeForStage = DWave.GetDataById(nextWaveNumber).Value.WaveTime;
         m_QuotaSlider.maxValue = DWave.GetDataById(nextWaveNumber).Value.CleanThreshold;
         m_QuotaSlider.value = 0;
