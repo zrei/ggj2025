@@ -297,8 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5287633b5fd5ecb4481cea428a521ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BeamTime: 5
-  <BeamCooldown>k__BackingField: 1
+  BeamTime: 10
   <SlideForce>k__BackingField: 10
   <CleanDragAmount>k__BackingField: 0.2
   <NeutralDragAmount>k__BackingField: 0.4
@@ -326,8 +325,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <DirtyMovementSpeed>k__BackingField: 3
-  <NeutralMovementSpeed>k__BackingField: 4
-  <CleanMovementSpeed>k__BackingField: 8
+  <NeutralMovementSpeed>k__BackingField: 5
+  <CleanMovementSpeed>k__BackingField: 10
 --- !u!1 &6817132022592959574
 GameObject:
   m_ObjectHideFlags: 0
