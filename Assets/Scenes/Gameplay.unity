@@ -944,10 +944,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 6068609251305248563, guid: c28cbb8a5f9c75d4eb4747edb034d0a5, type: 3}
-      propertyPath: <SlideForce>k__BackingField
-      value: 1200
-      objectReference: {fileID: 0}
     - target: {fileID: 7403921680441953088, guid: c28cbb8a5f9c75d4eb4747edb034d0a5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.41
