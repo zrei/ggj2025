@@ -366,6 +366,7 @@ MonoBehaviour:
   <EnemyUnitPrefabs>k__BackingField:
   - {fileID: 5241324883989192422, guid: c53501067ac112a42b3241a9f91f230d, type: 3}
   - {fileID: 1500966422669278794, guid: 8e22a296468f69645843e9c2c84c5c5d, type: 3}
+  - {fileID: 5563824063308711189, guid: ee1ccaa4a05474242a619ffea8fc8eba, type: 3}
 --- !u!1 &375175109
 GameObject:
   m_ObjectHideFlags: 0
