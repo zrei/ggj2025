@@ -117,6 +117,10 @@ public class PlayerBeam : Singleton<PlayerBeam>
 
         if (Player.Instance.IsDead)
         {
+            if (m_IsSliding)
+            {
+                ExitSlide();
+            }
             return;
         }
 
