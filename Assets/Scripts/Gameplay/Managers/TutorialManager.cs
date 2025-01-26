@@ -197,7 +197,7 @@ public class TutorialManager : Singleton<TutorialManager>
             timer = 5f;
             PlaySentence(TeachQuotaText);
             // Make timer flash
-            var quotaObject = PlayerHudManager.Instance.CleanThresholdText.gameObject;
+            var quotaObject = PlayerHudManager.Instance.CurrCleanedText.gameObject;
             while (timer > 0)
             {
                 quotaObject.SetActive(!quotaObject.activeSelf);

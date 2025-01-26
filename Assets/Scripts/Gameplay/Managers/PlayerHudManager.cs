@@ -22,7 +22,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     [field: SerializeField, Header("Clean Threshold")]
     public TextMeshProUGUI CleanThresholdText { get; set; }
-    [SerializeField] private TextMeshProUGUI m_CurrCleanedText;
+    [field: SerializeField] public TextMeshProUGUI CurrCleanedText { get; set; }
     [SerializeField] private Slider m_QuotaSlider;
 
     [field: SerializeField, Header("Wave Start Display")]
@@ -73,7 +73,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         {
             StageTimerText.text = ConvertTimerToDisplay(BattleManager.Instance.StageTimer);
             int filledPercentage = Mathf.CeilToInt(GridManager.Instance.GetCleanedPercentage);
-            m_CurrCleanedText.text = filledPercentage.ToString();
+            CurrCleanedText.text = filledPercentage.ToString();
             m_QuotaSlider.value = filledPercentage;
         }
     }
@@ -100,7 +100,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         int timeForStage = DWave.GetDataById(nextWaveNumber).Value.WaveTime;
         m_QuotaSlider.maxValue = DWave.GetDataById(nextWaveNumber).Value.CleanThreshold;
         m_QuotaSlider.value = 0;
-        m_CurrCleanedText.text = "0";
+        CurrCleanedText.text = "0";
         CleanThresholdText.text = $"{DWave.GetDataById(nextWaveNumber).Value.CleanThreshold}";
         StageTimerText.text = ConvertTimerToDisplay(timeForStage);
 
@@ -180,5 +180,10 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     private void OnMainMenuButtonClick()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void Playsound(AudioClip audioclip)
+    {
+        AudioSource.PlayOneShot(audioclip);
     }
 }
