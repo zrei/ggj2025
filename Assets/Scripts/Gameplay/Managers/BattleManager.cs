@@ -34,10 +34,12 @@ public class BattleManager : Singleton<BattleManager>
             return;
         }
 
+        State = GameState.BetweenWaves;
+
         await UniTask.WaitForSeconds(1f);
         if (!this) return;
 
-        NextWave();
+        PlayerHudManager.Instance.StartWave();
     }
 
     private void Update()
@@ -76,6 +78,7 @@ public class BattleManager : Singleton<BattleManager>
 
         if (increaseWave)
             CurrentWave++;
+        Debug.Log(CurrentWave);
         if (CurrentWave > DWave.GetAllData().Data.Count)
         {
             FinishGame();

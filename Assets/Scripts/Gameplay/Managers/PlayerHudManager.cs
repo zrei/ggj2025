@@ -20,6 +20,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     [field: SerializeField, Header("Wave Start Display")]
     private Animator WaveStartAnimator { get; set; }
+    [SerializeField] private TextMeshProUGUI m_WaveText;
 
     [field: SerializeField, Header("Lose Game Display")]
     private GameObject LoseGameDisplayParent { get; set; }
@@ -38,6 +39,8 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     [field: SerializeField]
     private AudioClip SadAudioClip { get; set; }
+
+    private const string WAVE_CARD_FORMAT = "Wave {0}";
 
     protected override void HandleAwake()
     {
@@ -66,17 +69,19 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         }
     }
 
-    public void StartGame()
+    public void StartWave(bool incrementWave = true)
     {
-        DisplayStartWaveUI().Forget();
+        DisplayStartWaveUI(incrementWave).Forget();
     }
 
-    private async UniTask DisplayStartWaveUI()
+    private async UniTask DisplayStartWaveUI(bool incrementWave = true)
     {
         // TODO: Show "Get Ready" text
 
         // We get the time for the stage first to display
-        int nextWaveNumber = BattleManager.Instance.CurrentWave + 1;
+        
+        int nextWaveNumber = incrementWave ? BattleManager.Instance.CurrentWave + 1 : BattleManager.Instance.CurrentWave;
+        m_WaveText.text = string.Format(WAVE_CARD_FORMAT, nextWaveNumber);
         int timeForStage = DWave.GetDataById(nextWaveNumber).Value.WaveTime;
         StageTimerText.text = ConvertTimerToDisplay(timeForStage);
 
@@ -89,7 +94,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         await UniTask.WaitForSeconds(1.5f);
         if (!this) return;
 
-        BattleManager.Instance.NextWave();
+        BattleManager.Instance.NextWave(incrementWave);
 
         await UniTask.CompletedTask;
     }
@@ -137,7 +142,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     private void OnTryAgainButtonClick()
     {
         LoseGameDisplayParent.SetActive(false);
-        BattleManager.Instance.NextWave(false);
+        StartWave(false);
     }
 
     private void OnMainMenuButtonClick()
