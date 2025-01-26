@@ -405,7 +405,7 @@ GameObject:
   - component: {fileID: 8350543685939207457}
   - component: {fileID: 9053945832007114400}
   m_Layer: 3
-  m_Name: Canvas
+  m_Name: BubbleBeamCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

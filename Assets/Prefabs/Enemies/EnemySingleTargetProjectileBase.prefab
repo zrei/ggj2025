@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2504188142786758132
+--- !u!1001 &2489888530230067419
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,11 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2868330703980732329, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
       propertyPath: m_Name
-      value: RadishProjectile
-      objectReference: {fileID: 0}
-    - target: {fileID: 4752021273597491082, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      value: EnemySingleTargetProjectileBase
       objectReference: {fileID: 0}
     - target: {fileID: 4760469268455895166, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -56,24 +52,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6757375052593129254, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 657950ae8271f004c8dc16c054121e1b, type: 3}
-    - target: {fileID: 6757375052593129254, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757375052593129254, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757375052593129254, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2868330703980732329, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4064549778345847377}
   m_SourcePrefab: {fileID: 100100000, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
+--- !u!1 &379296297610436466 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2868330703980732329, guid: 9d43915b0a421964fb26d044217918c0, type: 3}
+  m_PrefabInstance: {fileID: 2489888530230067419}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4064549778345847377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379296297610436466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f8d4d8931fa04d4d9b45893924edb3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -6,6 +6,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
 {
     public float SpeedMagnitude => m_Rigidbody.velocity.magnitude;
     public bool IsSliding => m_IsSliding;
+    public Vector2 CurrentSlideDirection { get; private set; }
 
     [field: SerializeField, Header("Values")]
     private float BeamTime;
@@ -59,7 +60,6 @@ public class PlayerBeam : Singleton<PlayerBeam>
     #endregion
 
     private Rigidbody2D m_Rigidbody;
-    private Vector2 m_CurrentSlideDirection;
     private float m_BeamCooldownTimer;
     private float m_BeamTimer;
     private bool m_IsSliding;
@@ -155,7 +155,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
             }
             else
             {
-                m_Rigidbody.AddForce(m_CurrentSlideDirection * SlideForce);
+                m_Rigidbody.AddForce(CurrentSlideDirection * SlideForce);
                 m_Rigidbody.drag = GetDrag();
                 if (m_IsSliding)
                 {
@@ -172,7 +172,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
 
     private void UpdateAim()
     {
-        m_CurrentSlideDirection = -(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+        CurrentSlideDirection = -(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
     }
 
     private float GetDrag()

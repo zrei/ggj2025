@@ -3,14 +3,18 @@ using UnityEngine;
 
 public abstract class EnemyBehaviour
 {
+    protected float m_Speed;
     protected Rigidbody2D m_Rb;
     protected EnemyUnit m_EnemyUnit;
+    protected TargetType m_TargetType;
 
     // i am in hell
-    public virtual void Setup(EnemyUnit enemyUnit, Rigidbody2D rigidbody, float speed, int param1, params object[] additionalArguments)
+    public virtual void Setup(EnemyUnit enemyUnit, Rigidbody2D rigidbody, float speed, TargetType targetType, int param1, DamageTypeDealt param2, params object[] additionalArguments)
     {
         m_EnemyUnit = enemyUnit;
         m_Rb = rigidbody;
+        m_Speed = speed;
+        m_TargetType = targetType;
     }
 
     public abstract void Enter();
@@ -21,24 +25,14 @@ public abstract class EnemyBehaviour
 // just wander for now
 public class EnemyMoveBehaviour : EnemyBehaviour
 {
-    public struct AdditionalMoveBehaviourData
-    {
-        public TargetType? m_TileTargetType;
-    }
-
-    private AdditionalMoveBehaviourData m_AdditionalData;
-    private float m_MovementSpeed;
-
     private List<Vector2> m_MoveLocations;
     private int m_MoveLocationIndex;
     private Vector2 m_PreviousLocation;
     private bool m_HasPreviousLocation = false;
 
-    public override void Setup(EnemyUnit enemyUnit, Rigidbody2D rigidbody, float speed, int param1, params object[] additionalArguments)
+    public override void Setup(EnemyUnit enemyUnit, Rigidbody2D rigidbody, float speed, TargetType targetType, int param1, DamageTypeDealt param2,params object[] additionalArguments)
     {
-        base.Setup(enemyUnit, rigidbody, speed, param1, additionalArguments);
-        m_MovementSpeed = speed;
-        m_AdditionalData = (AdditionalMoveBehaviourData)additionalArguments[0];
+        base.Setup(enemyUnit, rigidbody, speed, targetType, param1, param2, additionalArguments);
     }
 
     public override void Enter()
@@ -62,7 +56,7 @@ public class EnemyMoveBehaviour : EnemyBehaviour
         if (m_MoveLocations.Count == 0)
             return;
 
-        m_Rb.position = Vector2.MoveTowards(m_Rb.position, m_MoveLocations[m_MoveLocationIndex], m_MovementSpeed * deltaTime);
+        m_Rb.position = Vector2.MoveTowards(m_Rb.position, m_MoveLocations[m_MoveLocationIndex], m_Speed * deltaTime);
         if (m_Rb.position == m_MoveLocations[m_MoveLocationIndex])
         {
             ++m_MoveLocationIndex;
@@ -76,7 +70,15 @@ public class EnemyMoveBehaviour : EnemyBehaviour
 
     private void CalculateNewLocation(Vector2 currPosition)
     {
-        m_MoveLocations = GridManager.Instance.GetRandomTileLocations(currPosition, m_AdditionalData.m_TileTargetType, Player.Instance.UnitTransform.position);
+        if (m_TargetType != TargetType.Player)
+        {
+            m_MoveLocations = GridManager.Instance.GetRandomTileLocations(currPosition, m_TargetType, Player.Instance.UnitTransform.position);
+        }
+        else
+        {
+            m_MoveLocations = GridManager.Instance.GetRandomTileLocations(currPosition, m_TargetType);
+        }
+        
         m_MoveLocationIndex = 0;
     }
 
@@ -93,10 +95,10 @@ public class EnemyThrowBehaviour : EnemyBehaviour
     {
         public EnemyProjectile m_EnemyProjectileToFire;
         public float m_RadiusFromCenterToSpawn;
+        public EnemyAOEProjectile.AdditionalAOEInfo m_AdditionalAOEInfo;
     }
 
     private AdditionalEnemyThrowData m_AdditionalData;
-    private float m_ProjectileSpeed;
     private int m_NumBullets;
     private bool m_BulletsHasBeenFired = false;
 
@@ -105,10 +107,9 @@ public class EnemyThrowBehaviour : EnemyBehaviour
         m_BulletsHasBeenFired = false;
     }
 
-    public override void Setup(EnemyUnit enemyUnit, Rigidbody2D rigidbody, float speed, int param1, params object[] additionalArguments)
+    public override void Setup(EnemyUnit enemyUnit, Rigidbody2D rigidbody, float speed, TargetType targetType, int param1, DamageTypeDealt param2,params object[] additionalArguments)
     {
-        base.Setup(enemyUnit, rigidbody, speed, param1, additionalArguments);
-        m_ProjectileSpeed = speed;
+        base.Setup(enemyUnit, rigidbody, speed, targetType, param1, param2, additionalArguments);
         m_NumBullets = param1;
         m_AdditionalData = (AdditionalEnemyThrowData) additionalArguments[0];
     }
@@ -120,10 +121,11 @@ public class EnemyThrowBehaviour : EnemyBehaviour
         
         for (int i = 0; i < m_NumBullets; ++i)
         {
-            Vector3 direction = (Player.Instance.UnitTransform.position - m_EnemyUnit.UnitTransform.position).normalized;
+            Vector3 targetLocation = GridManager.Instance.GetRandomTargetLocation(m_Rb.position, m_TargetType);
+            Vector3 direction = (targetLocation - m_EnemyUnit.UnitTransform.position).normalized;
             Vector3 spawnPosition = m_EnemyUnit.UnitTransform.position + direction * m_AdditionalData.m_RadiusFromCenterToSpawn;
             EnemyProjectile enemyProjectile = GameObject.Instantiate(m_AdditionalData.m_EnemyProjectileToFire, spawnPosition, Quaternion.identity);
-            enemyProjectile.Setup(direction, m_EnemyUnit.Attack, m_ProjectileSpeed);
+            enemyProjectile.Setup(targetLocation, direction, m_EnemyUnit.Attack, m_Speed, m_TargetType, m_AdditionalData.m_AdditionalAOEInfo);
         }
 
         m_BulletsHasBeenFired = true;

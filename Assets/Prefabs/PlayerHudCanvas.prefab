@@ -531,6 +531,7 @@ MonoBehaviour:
   <StageTimerText>k__BackingField: {fileID: 4014383355823694543}
   <CleanThresholdText>k__BackingField: {fileID: 6182383805249196744}
   <WaveStartAnimator>k__BackingField: {fileID: 4245894229081066022}
+  m_WaveText: {fileID: 1574704155136209872}
   <LoseGameDisplayParent>k__BackingField: {fileID: 8859703278835938614}
   <TryAgainButton>k__BackingField: {fileID: 2204112478131993390}
   <MainMenuButton>k__BackingField: {fileID: 1289848047902614408}
