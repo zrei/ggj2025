@@ -77,6 +77,15 @@ public class PlayerBeam : Singleton<PlayerBeam>
         m_CurrTileType = TileType.NEUTRAL;
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_BubbleListLength = BubbleParticles.Count;
+
+        GlobalEvents.Waves.OnWaveEndEvent += ExitSlide;
+    }
+
+    protected override void HandleDestroy()
+    {
+        base.HandleDestroy();
+
+        GlobalEvents.Waves.OnWaveEndEvent -= ExitSlide;
     }
 
     private void Update()
