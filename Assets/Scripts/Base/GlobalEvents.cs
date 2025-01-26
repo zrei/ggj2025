@@ -32,4 +32,11 @@ public static class GlobalEvents
         public static VoidEvent OnWaveEndEvent;
         public static VoidEvent OnWaveStartEvent;
     }
+
+    public static class UI
+    {
+        public static float GreenOrangeThreshold = 0.6f;
+        public static float OrangeRedThreshold = 0.3f;
+
+    }
 }

@@ -8,6 +8,10 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 {
     [field: SerializeField]
     private Slider PlayerHealthSlider { get; set; }
+    [SerializeField] private Image m_PlayerIconIndicator;
+    [SerializeField] private Sprite m_GreenPlayerIcon;
+    [SerializeField] private Sprite m_OrangePlayerIcon;
+    [SerializeField] private Sprite m_RedPlayerIcon;
 
     [field: SerializeField, Header("Stage Timer")]
     private GameObject StageTimerParent {  get; set; }
@@ -136,7 +140,20 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     private void OnPlayerHealthValueChanged(int value)
     {
-        PlayerHealthSlider.value = value; 
+        PlayerHealthSlider.value = value;
+        float percentage = value / PlayerHealthSlider.maxValue;
+        if (percentage > GlobalEvents.UI.GreenOrangeThreshold)
+        {
+            m_PlayerIconIndicator.sprite = m_GreenPlayerIcon;
+        }
+        else if (percentage > GlobalEvents.UI.OrangeRedThreshold)
+        {
+            m_PlayerIconIndicator.sprite = m_OrangePlayerIcon;
+        }
+        else
+        {
+            m_PlayerIconIndicator.sprite = m_RedPlayerIcon;
+        }
     }
 
     private void OnTryAgainButtonClick()
