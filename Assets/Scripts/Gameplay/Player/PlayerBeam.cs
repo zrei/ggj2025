@@ -117,6 +117,10 @@ public class PlayerBeam : Singleton<PlayerBeam>
 
         if (Player.Instance.IsDead)
         {
+            if (m_IsSliding)
+            {
+                ExitSlide();
+            }
             return;
         }
 
@@ -140,7 +144,8 @@ public class PlayerBeam : Singleton<PlayerBeam>
             }
             else
             {
-                m_Rigidbody.AddForce(CurrentSlideDirection * SlideForce);
+                var slideMult = CurrTileType == TileType.CLEAN ? 3f : 1f;
+                m_Rigidbody.AddForce(CurrentSlideDirection * SlideForce * slideMult);
                 m_Rigidbody.drag = GetDrag();
                 if (m_IsSliding)
                 {

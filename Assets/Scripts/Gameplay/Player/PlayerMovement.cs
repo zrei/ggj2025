@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float x = m_Rigidbody.velocity.x;
 
-        if (PlayerBeam.Instance.IsSliding)
+        if (PlayerBeam.Instance.IsSliding && !Player.Instance.IsDead)
         {
             m_SpriteRenderer.flipX = false;
             var dir = PlayerBeam.Instance.CurrentSlideDirection;
