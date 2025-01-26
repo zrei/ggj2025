@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class PlayerHudManager : Singleton<PlayerHudManager>
 {
-    [field: SerializeField]
+    [field: SerializeField, Header("Health Bar")]
     private Slider PlayerHealthSlider { get; set; }
     [SerializeField] private Image m_PlayerIconIndicator;
     [SerializeField] private Sprite m_GreenPlayerIcon;
@@ -21,6 +22,8 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
 
     [field: SerializeField, Header("Clean Threshold")]
     public TextMeshProUGUI CleanThresholdText { get; set; }
+    [SerializeField] private TextMeshProUGUI m_CurrCleanedText;
+    [SerializeField] private Slider m_QuotaSlider;
 
     [field: SerializeField, Header("Wave Start Display")]
     private Animator WaveStartAnimator { get; set; }
@@ -69,7 +72,9 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         if (BattleManager.Instance.State == GameState.InGame)
         {
             StageTimerText.text = ConvertTimerToDisplay(BattleManager.Instance.StageTimer);
-            CleanThresholdText.text = $"{Mathf.CeilToInt(GridManager.Instance.GetCleanedPercentage)}/{BattleManager.Instance.WaveData.CleanThreshold}%";
+            int filledPercentage = Mathf.CeilToInt(GridManager.Instance.GetCleanedPercentage);
+            m_CurrCleanedText.text = filledPercentage.ToString();
+            m_QuotaSlider.value = filledPercentage;
         }
     }
 
@@ -81,7 +86,7 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
     private async UniTask DisplayStartWaveUI(bool incrementWave = true)
     {
         // TODO: Show "Get Ready" text
-        if (!BattleManager.Instance.HasNextWave)
+        if (incrementWave && !BattleManager.Instance.HasNextWave)
         {
             await UniTask.WaitForSeconds(3f);
             BattleManager.Instance.FinishGame();
@@ -93,6 +98,10 @@ public class PlayerHudManager : Singleton<PlayerHudManager>
         int nextWaveNumber = incrementWave ? BattleManager.Instance.CurrentWave + 1 : BattleManager.Instance.CurrentWave;
         m_WaveText.text = string.Format(WAVE_CARD_FORMAT, nextWaveNumber);
         int timeForStage = DWave.GetDataById(nextWaveNumber).Value.WaveTime;
+        m_QuotaSlider.maxValue = DWave.GetDataById(nextWaveNumber).Value.CleanThreshold;
+        m_QuotaSlider.value = 0;
+        m_CurrCleanedText.text = "0";
+        CleanThresholdText.text = $"{DWave.GetDataById(nextWaveNumber).Value.CleanThreshold}";
         StageTimerText.text = ConvertTimerToDisplay(timeForStage);
 
         // Some buffer for the next wave display to animate

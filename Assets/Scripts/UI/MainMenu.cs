@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,22 +8,14 @@ public class MainMenu : MonoBehaviour
     private Button PlayButton { get; set; }
 
     [field: SerializeField]
-    private Button HelpButton { get; set; }
-
-    [field: SerializeField]
-    private Button CloseHelpPanelButton { get; set; }
-
-    [field: SerializeField, Header("Panels")]
-    private GameObject HelpPanel { get; set; }
+    private Button QuitButton { get; set; }
 
     private void Awake()
     {
         PlayButton.onClick.RemoveAllListeners();
         PlayButton.onClick.AddListener(OnPlayButtonClick);
-        HelpButton.onClick.RemoveAllListeners();
-        HelpButton.onClick.AddListener(OnHelpButtonClick);
-        CloseHelpPanelButton.onClick.RemoveAllListeners();
-        CloseHelpPanelButton.onClick.AddListener(OnCloseHelpPanelButtonClick);
+        QuitButton.onClick.RemoveAllListeners();
+        QuitButton.onClick.AddListener(OnQuitButtonClick);
     }
 
     private void OnPlayButtonClick()
@@ -33,13 +23,9 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Tutorial");
     }
 
-    private void OnHelpButtonClick()
+    private void OnQuitButtonClick()
     {
-        HelpPanel.SetActive(true);
+        Application.Quit();
     }
 
-    private void OnCloseHelpPanelButtonClick()
-    {
-        HelpPanel.SetActive(false);
-    }
 }
