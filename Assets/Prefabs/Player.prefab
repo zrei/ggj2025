@@ -195,6 +195,7 @@ Transform:
   m_Children:
   - {fileID: 8126391220915137113}
   - {fileID: 8350543685939207457}
+  - {fileID: 2060126900508018140}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3523636377007419786
@@ -297,13 +298,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BeamTime: 5
-  <BeamCooldown>k__BackingField: 2
+  <BeamCooldown>k__BackingField: 1
   <SlideForce>k__BackingField: 10
   <CleanDragAmount>k__BackingField: 0.2
   <NeutralDragAmount>k__BackingField: 0.4
   <DirtyDragAmount>k__BackingField: 0.8
   <CooldownBarImage>k__BackingField: {fileID: 818854510856665636}
   <ReadyFireOutline>k__BackingField: {fileID: 6817132022592959574}
+  <ShootTransform>k__BackingField: {fileID: 2060126900508018140}
+  <BubbleParticles>k__BackingField:
+  - {fileID: 615003531552903574, guid: ee319f7908e75df4c836c7ba2689178b, type: 3}
+  - {fileID: 8202249654916859292, guid: 87ea58fdeca18114c90de75558ba6217, type: 3}
+  - {fileID: 6014839473495361165, guid: d0574c856f18a214597c6eff3edf997e, type: 3}
+  - {fileID: 452939397483003974, guid: 6afad932dfe2ad445b40d6b9fb0e9967, type: 3}
+  - {fileID: 7496892578267472665, guid: a0d695ec5a5c5864da7b4466d79f3f72, type: 3}
+  - {fileID: 2670179432582409050, guid: 60ddd6b06295a0c4a9a6a99ba41e972c, type: 3}
 --- !u!114 &3905510604897532066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,6 +465,37 @@ Canvas:
   m_SortingLayerID: 1764076381
   m_SortingOrder: 1
   m_TargetDisplay: 0
+--- !u!1 &8109629930057541646
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2060126900508018140}
+  m_Layer: 3
+  m_Name: ShootTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2060126900508018140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8109629930057541646}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.576, y: -0.278, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7403921680441953088}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8546662531914263611
 GameObject:
   m_ObjectHideFlags: 0

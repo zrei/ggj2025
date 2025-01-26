@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
@@ -32,6 +33,12 @@ public class PlayerBeam : Singleton<PlayerBeam>
     [field: SerializeField]
     private GameObject ReadyFireOutline { get; set; }
 
+    [field: SerializeField, Header("Particles")]
+    private Transform ShootTransform { get; set; }
+
+    [field: SerializeField]
+    private List<GameObject> BubbleParticles { get; set; }
+
     #region Tile State
     private TileType m_CurrTileType = TileType.NEUTRAL;
     private TileType CurrTileType
@@ -64,12 +71,14 @@ public class PlayerBeam : Singleton<PlayerBeam>
     private float m_BeamTimer;
     private bool m_IsSliding;
     private const float NORMAL_MOVEMENT_DRAG = 0;
+    private int m_BubbleListLength;
 
     protected override void HandleAwake()
     {
         m_CurrTileType = TileType.NEUTRAL;
         m_Rigidbody = GetComponent<Rigidbody2D>();
         m_BeamTimer = BeamCooldown;
+        m_BubbleListLength = BubbleParticles.Count;
     }
 
     private void Update()
@@ -77,6 +86,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
         GetPlayerInputs();
         UpdateAim();
         UpdateCooldownBarUI();
+        DisplayBubbleParticles();
 
         if (m_BeamCooldownTimer > 0)
         {
@@ -193,5 +203,14 @@ public class PlayerBeam : Singleton<PlayerBeam>
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
         m_BeamCooldownTimer = BeamCooldown;
         GlobalEvents.Player.OnPlayerStopSliding?.Invoke();
+    }
+
+    private void DisplayBubbleParticles()
+    {
+        if (m_IsSliding)
+        {
+            var offset = Random.insideUnitCircle * 0.2f;
+            Instantiate(BubbleParticles[Random.Range(0, m_BubbleListLength)], (Vector2)ShootTransform.position + offset, Quaternion.identity);
+        }
     }
 }

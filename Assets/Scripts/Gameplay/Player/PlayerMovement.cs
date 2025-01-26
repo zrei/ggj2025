@@ -61,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (PlayerBeam.Instance.IsSliding)
         {
+            m_SpriteRenderer.flipX = false;
             var dir = PlayerBeam.Instance.CurrentSlideDirection;
             float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             float finalAngle = targetAngle + 180f;
