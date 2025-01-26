@@ -75,7 +75,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
         m_BubbleListLength = BubbleParticles.Count;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         GetPlayerInputs();
         UpdateAim();
