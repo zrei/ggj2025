@@ -13,9 +13,6 @@ public class PlayerBeam : Singleton<PlayerBeam>
     private float BeamTime;
 
     [field: SerializeField]
-    private float BeamCooldown {  get; set; }
-
-    [field: SerializeField]
     private float SlideForce { get; set; }
 
     [field: SerializeField, Header("Drag Amounts")]
@@ -67,7 +64,6 @@ public class PlayerBeam : Singleton<PlayerBeam>
     #endregion
 
     private Rigidbody2D m_Rigidbody;
-    private float m_BeamCooldownTimer;
     private float m_BeamTimer;
     private bool m_IsSliding;
     private const float NORMAL_MOVEMENT_DRAG = 0;
@@ -77,7 +73,6 @@ public class PlayerBeam : Singleton<PlayerBeam>
     {
         m_CurrTileType = TileType.NEUTRAL;
         m_Rigidbody = GetComponent<Rigidbody2D>();
-        m_BeamTimer = BeamCooldown;
         m_BubbleListLength = BubbleParticles.Count;
     }
 
@@ -87,11 +82,6 @@ public class PlayerBeam : Singleton<PlayerBeam>
         UpdateAim();
         UpdateCooldownBarUI();
         DisplayBubbleParticles();
-
-        if (m_BeamCooldownTimer > 0)
-        {
-            m_BeamCooldownTimer -= Time.deltaTime;
-        }
 
         if (m_IsSliding)
         {
@@ -104,30 +94,17 @@ public class PlayerBeam : Singleton<PlayerBeam>
                 ExitSlide();
             }
         }
+        else
+        {
+            m_BeamTimer = Mathf.Min(m_BeamTimer + Time.deltaTime * 5, BeamTime);
+        }
     }
 
     private void UpdateCooldownBarUI()
     {
-        if (m_IsSliding)
-        {
-            var fraction = Mathf.Max(0f, m_BeamTimer / BeamTime);
-            CooldownBarImage.fillAmount = fraction;
-            ReadyFireOutline.SetActive(false);
-        }
-        else
-        {
-            var fraction = Mathf.Max(0f, (BeamCooldown - m_BeamCooldownTimer) / BeamCooldown);
-            CooldownBarImage.fillAmount = fraction;
-
-            if (CooldownBarImage.fillAmount >= 0.9999f)
-            {
-                ReadyFireOutline.SetActive(true);
-            }
-            else
-            {
-                ReadyFireOutline.SetActive(false);
-            }
-        }
+        var fraction = Mathf.Max(0f, m_BeamTimer / BeamTime);
+        CooldownBarImage.fillAmount = fraction;
+        ReadyFireOutline.SetActive(false);
     }
 
     private void GetPlayerInputs()
@@ -144,7 +121,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
             return;
         }
 
-        if (m_BeamCooldownTimer > 0)
+        if (m_BeamTimer <= 0.5f)
         {
             return;
         }
@@ -158,7 +135,6 @@ public class PlayerBeam : Singleton<PlayerBeam>
         {
             if (!m_IsSliding)
             {
-                m_BeamTimer = BeamTime;
                 m_IsSliding = true;
                 GlobalEvents.Player.OnPlayerShoot?.Invoke();
                 return;
@@ -201,7 +177,6 @@ public class PlayerBeam : Singleton<PlayerBeam>
         m_IsSliding = false;
         m_Rigidbody.velocity = Vector2.zero;
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
-        m_BeamCooldownTimer = BeamCooldown;
         GlobalEvents.Player.OnPlayerStopSliding?.Invoke();
     }
 
