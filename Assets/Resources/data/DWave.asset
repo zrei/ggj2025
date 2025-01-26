@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Data>k__BackingField:
   - <Id>k__BackingField: 1
-    <WaveTime>k__BackingField: 45
+    <WaveTime>k__BackingField: 5
     <CleanThreshold>k__BackingField: 15
     <ProjectileSpeedMult>k__BackingField: 1
     <MovementSpeedMultiplier>k__BackingField: 1

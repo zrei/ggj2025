@@ -20,6 +20,8 @@ public class MainMenu : MonoBehaviour
 
     private void OnPlayButtonClick()
     {
+
+
         SceneManager.LoadScene("Tutorial");
     }
 
