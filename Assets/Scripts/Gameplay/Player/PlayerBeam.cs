@@ -36,6 +36,10 @@ public class PlayerBeam : Singleton<PlayerBeam>
     [field: SerializeField]
     private List<GameObject> BubbleParticles { get; set; }
 
+    [SerializeField] private AudioClip m_BeamStartSound;
+    [SerializeField] private AudioClip m_BeamSound;
+    [SerializeField] private AudioSource m_AudioSource;
+
     #region Tile State
     private TileType m_CurrTileType = TileType.NEUTRAL;
     private TileType CurrTileType
@@ -84,6 +88,12 @@ public class PlayerBeam : Singleton<PlayerBeam>
 
         if (m_IsSliding)
         {
+            if (!m_AudioSource.isPlaying)
+            {
+                m_AudioSource.clip = m_BeamSound;
+                m_AudioSource.loop = true;
+                m_AudioSource.Play();
+            }
             if (m_BeamTimer > 0)
             {
                 m_BeamTimer -= Time.deltaTime;
@@ -139,6 +149,9 @@ public class PlayerBeam : Singleton<PlayerBeam>
             if (!m_IsSliding)
             {
                 m_IsSliding = true;
+                m_AudioSource.clip = m_BeamStartSound;
+                m_AudioSource.loop = false;
+                m_AudioSource.Play();
                 GlobalEvents.Player.OnPlayerShoot?.Invoke();
                 return;
             }
@@ -177,6 +190,7 @@ public class PlayerBeam : Singleton<PlayerBeam>
 
     private void ExitSlide()
     {
+        m_AudioSource.Stop();
         m_IsSliding = false;
         m_Rigidbody.drag = NORMAL_MOVEMENT_DRAG;
         GlobalEvents.Player.OnPlayerStopSliding?.Invoke();
