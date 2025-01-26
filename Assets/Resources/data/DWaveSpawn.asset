@@ -15,8 +15,8 @@ MonoBehaviour:
   <Data>k__BackingField:
   - <Wave>k__BackingField: 1
     <EnemyId>k__BackingField: 0
-    <RowSpawnPoint>k__BackingField: 3
-    <ColSpawnPoint>k__BackingField: 5
+    <RowSpawnPoint>k__BackingField: 20
+    <ColSpawnPoint>k__BackingField: 10
     <Delay>k__BackingField: 1
   - <Wave>k__BackingField: 1
     <EnemyId>k__BackingField: 0
@@ -35,8 +35,8 @@ MonoBehaviour:
     <Delay>k__BackingField: 1
   - <Wave>k__BackingField: 2
     <EnemyId>k__BackingField: 0
-    <RowSpawnPoint>k__BackingField: 5
-    <ColSpawnPoint>k__BackingField: 8
+    <RowSpawnPoint>k__BackingField: 20
+    <ColSpawnPoint>k__BackingField: 10
     <Delay>k__BackingField: 1
   - <Wave>k__BackingField: 2
     <EnemyId>k__BackingField: 0
@@ -55,8 +55,8 @@ MonoBehaviour:
     <Delay>k__BackingField: 1
   - <Wave>k__BackingField: 3
     <EnemyId>k__BackingField: 1
-    <RowSpawnPoint>k__BackingField: 5
-    <ColSpawnPoint>k__BackingField: 6
+    <RowSpawnPoint>k__BackingField: 20
+    <ColSpawnPoint>k__BackingField: 10
     <Delay>k__BackingField: 1
   - <Wave>k__BackingField: 3
     <EnemyId>k__BackingField: 1
@@ -65,8 +65,8 @@ MonoBehaviour:
     <Delay>k__BackingField: 1
   - <Wave>k__BackingField: 4
     <EnemyId>k__BackingField: 0
-    <RowSpawnPoint>k__BackingField: 3
-    <ColSpawnPoint>k__BackingField: 6
+    <RowSpawnPoint>k__BackingField: 20
+    <ColSpawnPoint>k__BackingField: 10
     <Delay>k__BackingField: 0
   - <Wave>k__BackingField: 4
     <EnemyId>k__BackingField: 0
@@ -105,6 +105,6 @@ MonoBehaviour:
     <Delay>k__BackingField: 1
   - <Wave>k__BackingField: 5
     <EnemyId>k__BackingField: 2
-    <RowSpawnPoint>k__BackingField: 2
-    <ColSpawnPoint>k__BackingField: 8
+    <RowSpawnPoint>k__BackingField: 20
+    <ColSpawnPoint>k__BackingField: 10
     <Delay>k__BackingField: 1
