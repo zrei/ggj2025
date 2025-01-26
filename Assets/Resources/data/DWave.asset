@@ -22,29 +22,29 @@ MonoBehaviour:
     <AttackMultiplier>k__BackingField: 1
   - <Id>k__BackingField: 2
     <WaveTime>k__BackingField: 45
-    <CleanThreshold>k__BackingField: 25
+    <CleanThreshold>k__BackingField: 20
     <ProjectileSpeedMult>k__BackingField: 1
     <MovementSpeedMultiplier>k__BackingField: 1
     <HpMultiplier>k__BackingField: 2
     <AttackMultiplier>k__BackingField: 1
   - <Id>k__BackingField: 3
     <WaveTime>k__BackingField: 60
-    <CleanThreshold>k__BackingField: 35
+    <CleanThreshold>k__BackingField: 25
     <ProjectileSpeedMult>k__BackingField: 1
     <MovementSpeedMultiplier>k__BackingField: 1
     <HpMultiplier>k__BackingField: 2
     <AttackMultiplier>k__BackingField: 1
   - <Id>k__BackingField: 4
-    <WaveTime>k__BackingField: 120
-    <CleanThreshold>k__BackingField: 50
+    <WaveTime>k__BackingField: 60
+    <CleanThreshold>k__BackingField: 30
     <ProjectileSpeedMult>k__BackingField: 1
     <MovementSpeedMultiplier>k__BackingField: 1.2
-    <HpMultiplier>k__BackingField: 1
+    <HpMultiplier>k__BackingField: 2
     <AttackMultiplier>k__BackingField: 1
   - <Id>k__BackingField: 5
-    <WaveTime>k__BackingField: 120
-    <CleanThreshold>k__BackingField: 50
-    <ProjectileSpeedMult>k__BackingField: 1.2
+    <WaveTime>k__BackingField: 75
+    <CleanThreshold>k__BackingField: 35
+    <ProjectileSpeedMult>k__BackingField: 1
     <MovementSpeedMultiplier>k__BackingField: 1.5
-    <HpMultiplier>k__BackingField: 1
+    <HpMultiplier>k__BackingField: 2
     <AttackMultiplier>k__BackingField: 1
