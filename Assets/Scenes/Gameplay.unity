@@ -8086,22 +8086,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5522007670409712099, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
-      propertyPath: m_SortingOrder
-      value: -1
+    - target: {fileID: 3566227631920601971, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6497738805910933335, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
-      propertyPath: m_NumCols
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 6497738805910933335, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
-      propertyPath: m_NumRows
-      value: 26
-      objectReference: {fileID: 0}
-    - target: {fileID: 6497738805910933335, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
-      propertyPath: m_NeutralTiles.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 4e9837d09e1ac4749bfc0d114891e9b8, type: 2}
     - target: {fileID: 7520429215958342552, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
       propertyPath: m_Size.x
       value: 36
@@ -12405,6 +12393,10 @@ PrefabInstance:
     - target: {fileID: 7521467572967070279, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
       propertyPath: m_Name
       value: FloorGrid
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734625847525995938, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7821982231551965560, guid: e8f84327f0b478045a4e8fef91caa1e6, type: 3}
       propertyPath: m_Size.x
@@ -27892,7 +27884,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1375341436
 Transform:
   m_ObjectHideFlags: 0

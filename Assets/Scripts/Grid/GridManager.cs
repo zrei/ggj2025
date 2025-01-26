@@ -95,6 +95,8 @@ public class GridManager : Singleton<GridManager>
     [Header("Tile Visuals")]
     [SerializeField] private Grid m_FloorGrid = null;
     [SerializeField] private Tilemap m_FloorTilemap = null;
+    [SerializeField] private Grid m_EffectGrid = null;
+    [SerializeField] private Tilemap m_EffectTilemap = null;
     [SerializeField] private TileBase[] m_PaintedTiles = null;
     [SerializeField] private TileBase[] m_DirtyTiles = null;
     [SerializeField] private TileBase[] m_NeutralTiles = null;
@@ -246,7 +248,7 @@ public class GridManager : Singleton<GridManager>
     private void SetTileVisuals(Vector2Int tileCoordinates, TileType tileType)
     {
         // update visuals
-        m_FloorTilemap.SetTile(ConvertToTilemapCoordinates(tileCoordinates), GetTile(tileType));
+        m_EffectTilemap.SetTile(ConvertToTilemapCoordinates(tileCoordinates), tileType == TileType.NEUTRAL ? null : GetTile(tileType));
     }
     #endregion
 
@@ -272,43 +274,6 @@ public class GridManager : Singleton<GridManager>
     #region Quota
     public float GetCleanedPercentage => m_TileState.GetCleanedTiles(m_NumObstacles) * 100;
     #endregion
-
-#if UNITY_EDITOR
-    #region Setup
-    public void SetupGrids()
-    {
-        m_FloorGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
-        m_ObstacleGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
-        m_WallGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
-
-        SetupWalls();
-    }
-
-    private void SetupWalls()
-    {
-        m_WallTilemap.ClearAllTiles();
-        for (int r = 0; r < m_NumRows; ++r)
-        {
-            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, r)), m_WallTile);
-            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, r)), m_WallTile);
-        }
-        for (int c = 0; c < m_NumCols; ++c)
-        {
-            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(c, -1)), m_WallTile);
-            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(c, m_NumRows)), m_WallTile);
-        }
-        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, m_NumRows)), m_WallTile);
-        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, -1)), m_WallTile);
-        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, m_NumRows)), m_WallTile);
-        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, -1)), m_WallTile);
-    }
-
-    public void ClearObstacles()
-    {
-        m_ObstacleTilemap.ClearAllTiles();
-    }
-    #endregion
-#endif
 
     #region Pathfinding
     private static TileType[] GetFilteredTileTypes(TargetType targetType)
@@ -463,6 +428,57 @@ public class GridManager : Singleton<GridManager>
         return new();
     }
     #endregion
+
+#if UNITY_EDITOR
+    #region Setup
+    public void SetupGrids()
+    {
+        m_FloorGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
+        m_EffectGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
+        m_ObstacleGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
+        m_WallGrid.cellSize = new Vector3(m_TileLength, m_TileLength, 0);
+
+        SetupWalls();
+        SetupFloor();
+    }
+
+    private void SetupWalls()
+    {
+        m_WallTilemap.ClearAllTiles();
+        for (int r = 0; r < m_NumRows; ++r)
+        {
+            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, r)), m_WallTile);
+            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, r)), m_WallTile);
+        }
+        for (int c = 0; c < m_NumCols; ++c)
+        {
+            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(c, -1)), m_WallTile);
+            m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(c, m_NumRows)), m_WallTile);
+        }
+        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, m_NumRows)), m_WallTile);
+        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(-1, -1)), m_WallTile);
+        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, m_NumRows)), m_WallTile);
+        m_WallTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(m_NumCols, -1)), m_WallTile);
+    }
+
+    private void SetupFloor()
+    {
+        m_FloorTilemap.ClearAllTiles();
+        for (int r = 0; r < m_NumRows; ++r)
+        {
+            for (int c = 0; c < m_NumCols; ++c)
+            {
+                m_FloorTilemap.SetTile(ConvertToTilemapCoordinates(new Vector2Int(c, r)), GetTile(TileType.NEUTRAL));
+            }
+        }
+    }
+
+    public void ClearObstacles()
+    {
+        m_ObstacleTilemap.ClearAllTiles();
+    }
+    #endregion
+#endif
 }
 
 #if UNITY_EDITOR
